@@ -98,6 +98,142 @@
       margin-bottom:18px;
     }
 
+    .hero-row{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .account-bar{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 10px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.78);
+      box-shadow:0 8px 22px rgba(26,47,94,.06);
+    }
+
+    body.dark .account-bar{
+      background:rgba(15,23,42,.82);
+    }
+
+    .account-identity{
+      display:flex;
+      align-items:center;
+      gap:9px;
+      min-width:150px;
+    }
+
+    .account-avatar{
+      width:38px;
+      height:38px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(145deg,#2563eb,#7c3aed);
+      color:#fff;
+      font-weight:900;
+      text-transform:uppercase;
+    }
+
+    .account-name{
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .account-caption{
+      margin-top:2px;
+      color:var(--muted);
+      font-size:11px;
+    }
+
+    .account-actions{
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+    }
+
+    .account-actions button{
+      padding:9px 11px;
+      font-size:12px;
+    }
+
+    .account-modal{
+      position:fixed;
+      inset:0;
+      z-index:1000;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      background:rgba(15,23,42,.64);
+      backdrop-filter:blur(5px);
+    }
+
+    .account-modal.is-open{display:flex}
+
+    .account-dialog{
+      width:min(460px,100%);
+      padding:22px;
+      border-radius:22px;
+      border:1px solid var(--line);
+      background:var(--panel);
+      box-shadow:0 24px 70px rgba(15,23,42,.28);
+    }
+
+    .account-dialog-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .account-dialog-head h3{margin:0 0 5px}
+
+    .account-close{
+      width:38px;
+      min-width:38px;
+      padding:8px;
+      border-radius:50%;
+      background:transparent;
+      color:var(--muted);
+      box-shadow:none;
+    }
+
+    .account-form{
+      display:grid;
+      gap:11px;
+    }
+
+    .account-form label{
+      display:grid;
+      gap:6px;
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .account-modal-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+      margin-top:3px;
+    }
+
+    .account-status{
+      min-height:22px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .account-status.error{color:#b91c1c}
+    .account-status.success{color:#15803d}
+
     .title{
       font-size:32px;
       font-weight:800;
@@ -1095,9 +1231,26 @@
 
     <section id="mainScreen" class="screen active">
       <div class="hero">
-        <div class="title">Vocabulary Paste & Learn Pro</div>
-        <div class="subtitle">
-          Dán trực tiếp danh sách từ vựng từ Google Docs/Word vào đây, phân tích dữ liệu và học ngay trên một khu học riêng.
+        <div class="hero-row">
+          <div>
+            <div class="title">Vocabulary Paste & Learn Pro</div>
+            <div class="subtitle">
+              Dán trực tiếp danh sách từ vựng từ Google Docs/Word vào đây, phân tích dữ liệu và học ngay trên một khu học riêng.
+            </div>
+          </div>
+          <div class="account-bar">
+            <div class="account-identity">
+              <div id="accountAvatar" class="account-avatar">K</div>
+              <div>
+                <div id="accountName" class="account-name">Chế độ khách</div>
+                <div id="accountCaption" class="account-caption">Dữ liệu mặc định trên máy này</div>
+              </div>
+            </div>
+            <div class="account-actions">
+              <button id="openAccountBtn" class="btn-primary" type="button">Đăng nhập</button>
+              <button id="logoutAccountBtn" class="btn-secondary" type="button" style="display:none;">Đăng xuất</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1464,12 +1617,40 @@ Listening - UNIT 2
     </section>
   </div>
 
+  <div id="accountModal" class="account-modal" role="dialog" aria-modal="true" aria-labelledby="accountDialogTitle">
+    <div class="account-dialog">
+      <div class="account-dialog-head">
+        <div>
+          <h3 id="accountDialogTitle">Không gian học riêng</h3>
+          <div class="subtitle">Đăng nhập hoặc tạo tài khoản mới chỉ bằng tên và mật khẩu.</div>
+        </div>
+        <button id="closeAccountBtn" class="account-close" type="button" aria-label="Đóng">✕</button>
+      </div>
+      <form id="accountForm" class="account-form">
+        <label>Tên đăng nhập
+          <input id="accountUsername" type="text" autocomplete="username" maxlength="24" placeholder="Ví dụ: phat123" required />
+        </label>
+        <label>Mật khẩu
+          <input id="accountPassword" type="password" autocomplete="current-password" minlength="4" maxlength="64" placeholder="Ít nhất 4 ký tự" required />
+        </label>
+        <div class="account-modal-actions">
+          <button id="loginAccountBtn" class="btn-primary" type="submit">Đăng nhập</button>
+          <button id="registerAccountBtn" class="btn-secondary" type="button">Tạo tài khoản</button>
+        </div>
+        <div id="accountStatus" class="account-status" aria-live="polite"></div>
+        <div class="note" style="margin-top:0;">Tài khoản này lưu cục bộ trong trình duyệt hiện tại. Mỗi tài khoản có danh sách từ, đánh dấu, từ sai và thống kê riêng; chưa đồng bộ qua thiết bị khác.</div>
+      </form>
+    </div>
+  </div>
+
   <script>
     const STORAGE_KEY = "vocab_paste_learn_pro_data";
     const WRONG_KEY = "vocab_paste_learn_pro_wrong";
     const STATS_KEY = "vocab_paste_learn_pro_stats";
     const THEME_KEY = "vocab_paste_learn_pro_theme";
     const ENRICHMENT_CACHE_KEY = "vocab_paste_learn_pro_lexical_cache_v6";
+    const ACCOUNTS_KEY = "vocab_paste_learn_pro_accounts_v1";
+    const ACCOUNT_SESSION_KEY = "vocab_paste_learn_pro_current_account_v1";
     const ENRICHMENT_CACHE_TTL = 30 * 24 * 60 * 60 * 1000;
     const DATAMUSE_API = "https://api.datamuse.com/words";
     const GAME_MODES = new Set(["memory-match", "word-scramble", "word-catch", "true-false"]);
@@ -1535,6 +1716,20 @@ Listening - UNIT 2
     const importWordBtn = document.getElementById("importWordBtn");
     const wordFileInput = document.getElementById("wordFileInput");
     const wordStatus = document.getElementById("wordStatus");
+    const accountModal = document.getElementById("accountModal");
+    const accountDialogTitle = document.getElementById("accountDialogTitle");
+    const closeAccountBtn = document.getElementById("closeAccountBtn");
+    const accountForm = document.getElementById("accountForm");
+    const accountUsername = document.getElementById("accountUsername");
+    const accountPassword = document.getElementById("accountPassword");
+    const loginAccountBtn = document.getElementById("loginAccountBtn");
+    const registerAccountBtn = document.getElementById("registerAccountBtn");
+    const accountStatus = document.getElementById("accountStatus");
+    const accountAvatar = document.getElementById("accountAvatar");
+    const accountName = document.getElementById("accountName");
+    const accountCaption = document.getElementById("accountCaption");
+    const openAccountBtn = document.getElementById("openAccountBtn");
+    const logoutAccountBtn = document.getElementById("logoutAccountBtn");
 
     const totalWords = document.getElementById("totalWords");
     const totalGroups = document.getElementById("totalGroups");
@@ -1627,6 +1822,7 @@ Listening - UNIT 2
     let sessionChartInstance = null;
     let activityChartInstance = null;
     let modeChartInstance = null;
+    let activeAccount = null;
 
     function escapeHtml(str) {
       return String(str)
@@ -1637,6 +1833,228 @@ Listening - UNIT 2
 
     function escapeAttr(str) {
       return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    }
+
+    function normalizeUsername(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function profileStorageKey(baseKey) {
+      return activeAccount
+        ? `${baseKey}::account::${encodeURIComponent(activeAccount.normalizedUsername)}`
+        : baseKey;
+    }
+
+    function loadAccounts() {
+      try {
+        const data = JSON.parse(localStorage.getItem(ACCOUNTS_KEY) || "[]");
+        return Array.isArray(data) ? data : [];
+      } catch (error) {
+        return [];
+      }
+    }
+
+    function saveAccounts(accounts) {
+      localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(accounts));
+    }
+
+    function bytesToHex(bytes) {
+      return Array.from(bytes, byte => byte.toString(16).padStart(2, "0")).join("");
+    }
+
+    async function hashPassword(password, saltHex) {
+      const encoder = new TextEncoder();
+      const key = await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(password),
+        "PBKDF2",
+        false,
+        ["deriveBits"]
+      );
+      const salt = new Uint8Array((saltHex.match(/.{1,2}/g) || []).map(value => parseInt(value, 16)));
+      const bits = await crypto.subtle.deriveBits({
+        name: "PBKDF2",
+        salt,
+        iterations: 120000,
+        hash: "SHA-256"
+      }, key, 256);
+      return bytesToHex(new Uint8Array(bits));
+    }
+
+    function setAccountStatus(message = "", type = "") {
+      accountStatus.textContent = message;
+      accountStatus.className = `account-status${type ? ` ${type}` : ""}`;
+    }
+
+    function setAccountBusy(isBusy) {
+      loginAccountBtn.disabled = isBusy;
+      registerAccountBtn.disabled = isBusy;
+      accountUsername.disabled = isBusy;
+      accountPassword.disabled = isBusy;
+    }
+
+    function openAccountModal() {
+      accountDialogTitle.textContent = activeAccount ? "Đổi tài khoản" : "Không gian học riêng";
+      accountUsername.value = "";
+      accountPassword.value = "";
+      setAccountStatus();
+      accountModal.classList.add("is-open");
+      document.body.style.overflow = "hidden";
+      setTimeout(() => accountUsername.focus(), 0);
+    }
+
+    function closeAccountModal() {
+      accountModal.classList.remove("is-open");
+      document.body.style.overflow = "";
+      setAccountStatus();
+    }
+
+    function updateAccountUI() {
+      if (activeAccount) {
+        accountAvatar.textContent = activeAccount.username.slice(0, 1).toUpperCase();
+        accountName.textContent = activeAccount.username;
+        accountCaption.textContent = "Danh sách, đánh dấu và thống kê riêng";
+        openAccountBtn.textContent = "Đổi tài khoản";
+        logoutAccountBtn.style.display = "inline-flex";
+      } else {
+        accountAvatar.textContent = "K";
+        accountName.textContent = "Chế độ khách";
+        accountCaption.textContent = "Dữ liệu mặc định trên máy này";
+        openAccountBtn.textContent = "Đăng nhập";
+        logoutAccountBtn.style.display = "none";
+      }
+    }
+
+    function resetProfileState() {
+      clearTimer();
+      clearGameAdvance();
+      appState.entries = [];
+      appState.parseErrors = [];
+      appState.groups = [];
+      appState.wrongGlobal = [];
+      appState.quizPool = [];
+      appState.quizUsedIndexes = [];
+      appState.currentQuestion = null;
+      appState.attempted = 0;
+      appState.correct = 0;
+      appState.streak = 0;
+      appState.bestSessionStreak = 0;
+      appState.skipped = 0;
+      appState.wrongSession = [];
+      appState.answered = false;
+      appState.finished = false;
+      appState.sessionStartedAt = 0;
+      appState.sessionRecorded = false;
+      appState.sessionHistory = [];
+      appState.hardWords = {};
+      appState.lifetimeStats = { attempted: 0, correct: 0, wrong: 0, skipped: 0, sessions: 0, bestStreak: 0 };
+      appState.modeStats = {};
+      appState.groupStats = {};
+      appState.dailyStats = {};
+      appState.wordPerformance = {};
+      appState.flashcardFlipped = false;
+      appState.gameMoves = 0;
+      appState.gameMistakes = 0;
+      appState.gameMatches = 0;
+      appState.memoryFirstCard = null;
+      appState.memoryLocked = false;
+    }
+
+    function loadActiveProfile() {
+      resetProfileState();
+      loadEntries();
+      loadWrongGlobal();
+      loadAdvancedStats();
+      rawInput.value = appState.entries.length ? serializeEntriesToRaw(appState.entries) : "";
+      renderPreview();
+      renderMainWrongSummary();
+      renderHardWords();
+      renderCharts();
+      renderAdvancedDashboard();
+      updateStartButtonLabel();
+      updateAccountUI();
+      switchScreen(mainScreen);
+    }
+
+    function activateAccount(account) {
+      activeAccount = account;
+      localStorage.setItem(ACCOUNT_SESSION_KEY, account.normalizedUsername);
+      loadActiveProfile();
+    }
+
+    function logoutAccount() {
+      activeAccount = null;
+      localStorage.removeItem(ACCOUNT_SESSION_KEY);
+      closeAccountModal();
+      loadActiveProfile();
+    }
+
+    async function registerAccount() {
+      const username = accountUsername.value.trim();
+      const normalizedUsername = normalizeUsername(username);
+      const password = accountPassword.value;
+      if (!/^[A-Za-z0-9._-]{3,24}$/.test(username)) {
+        setAccountStatus("Tên đăng nhập cần 3–24 ký tự, chỉ gồm chữ, số, dấu chấm, gạch dưới hoặc gạch ngang.", "error");
+        return;
+      }
+      if (password.length < 4) {
+        setAccountStatus("Mật khẩu cần ít nhất 4 ký tự.", "error");
+        return;
+      }
+      const accounts = loadAccounts();
+      if (accounts.some(account => account.normalizedUsername === normalizedUsername)) {
+        setAccountStatus("Tên đăng nhập này đã tồn tại. Hãy đăng nhập hoặc chọn tên khác.", "error");
+        return;
+      }
+      setAccountBusy(true);
+      setAccountStatus("Đang tạo không gian riêng…");
+      try {
+        const salt = bytesToHex(crypto.getRandomValues(new Uint8Array(16)));
+        const account = {
+          username,
+          normalizedUsername,
+          salt,
+          passwordHash: await hashPassword(password, salt),
+          createdAt: new Date().toISOString()
+        };
+        accounts.push(account);
+        saveAccounts(accounts);
+        activateAccount(account);
+        closeAccountModal();
+      } catch (error) {
+        setAccountStatus("Trình duyệt này chưa hỗ trợ tạo tài khoản cục bộ an toàn.", "error");
+      } finally {
+        setAccountBusy(false);
+      }
+    }
+
+    async function loginAccount() {
+      const normalizedUsername = normalizeUsername(accountUsername.value);
+      const password = accountPassword.value;
+      const account = loadAccounts().find(item => item.normalizedUsername === normalizedUsername);
+      if (!normalizedUsername || !password) {
+        setAccountStatus("Hãy nhập đủ tên đăng nhập và mật khẩu.", "error");
+        return;
+      }
+      if (!account) {
+        setAccountStatus("Tên đăng nhập hoặc mật khẩu không đúng.", "error");
+        return;
+      }
+      setAccountBusy(true);
+      setAccountStatus("Đang mở không gian học…");
+      try {
+        const passwordHash = await hashPassword(password, account.salt);
+        if (passwordHash !== account.passwordHash) {
+          setAccountStatus("Tên đăng nhập hoặc mật khẩu không đúng.", "error");
+          return;
+        }
+        activateAccount(account);
+        closeAccountModal();
+      } catch (error) {
+        setAccountStatus("Không thể đăng nhập lúc này. Hãy thử lại.", "error");
+      } finally {
+        setAccountBusy(false);
+      }
     }
 
     function normalizeMeaning(text) {
@@ -1887,14 +2305,14 @@ Listening - UNIT 2
     }
 
     function saveEntries() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      localStorage.setItem(profileStorageKey(STORAGE_KEY), JSON.stringify({
         entries: appState.entries,
         groups: appState.groups
       }));
     }
 
     function loadEntries() {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      const raw = localStorage.getItem(profileStorageKey(STORAGE_KEY));
       if (!raw) return;
       try {
         const data = JSON.parse(raw);
@@ -2134,11 +2552,11 @@ Listening - UNIT 2
     }
 
     function saveWrongGlobal() {
-      localStorage.setItem(WRONG_KEY, JSON.stringify(appState.wrongGlobal));
+      localStorage.setItem(profileStorageKey(WRONG_KEY), JSON.stringify(appState.wrongGlobal));
     }
 
     function loadWrongGlobal() {
-      const raw = localStorage.getItem(WRONG_KEY);
+      const raw = localStorage.getItem(profileStorageKey(WRONG_KEY));
       if (!raw) return;
       try {
         const data = JSON.parse(raw);
@@ -2168,7 +2586,7 @@ Listening - UNIT 2
     }
 
     function saveAdvancedStats() {
-      localStorage.setItem(STATS_KEY, JSON.stringify({
+      localStorage.setItem(profileStorageKey(STATS_KEY), JSON.stringify({
         version: 2,
         sessionHistory: appState.sessionHistory,
         hardWords: appState.hardWords,
@@ -2181,7 +2599,7 @@ Listening - UNIT 2
     }
 
     function loadAdvancedStats() {
-      const raw = localStorage.getItem(STATS_KEY);
+      const raw = localStorage.getItem(profileStorageKey(STATS_KEY));
       if (!raw) return;
       try {
         const data = JSON.parse(raw);
@@ -4191,8 +4609,31 @@ mentor (v) – hướng dẫn, cố vấn`;
       }
     });
 
+    openAccountBtn.addEventListener("click", openAccountModal);
+    closeAccountBtn.addEventListener("click", closeAccountModal);
+    logoutAccountBtn.addEventListener("click", () => {
+      if (confirm(`Đăng xuất khỏi tài khoản “${activeAccount?.username || ""}”?`)) logoutAccount();
+    });
+    accountModal.addEventListener("click", event => {
+      if (event.target === accountModal) closeAccountModal();
+    });
+    accountForm.addEventListener("submit", event => {
+      event.preventDefault();
+      loginAccount();
+    });
+    registerAccountBtn.addEventListener("click", registerAccount);
+
     document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && accountModal.classList.contains("is-open")) {
+        closeAccountModal();
+        return;
+      }
       if (!studyScreen.classList.contains("active")) return;
+
+      const target = e.target;
+      if (target instanceof HTMLElement && (
+        target.matches("input, textarea, select") || target.isContentEditable
+      )) return;
 
       if (e.key === "1") optionsBox.querySelectorAll(".option")[0]?.click();
       if (e.key === "2") optionsBox.querySelectorAll(".option")[1]?.click();
@@ -4211,17 +4652,22 @@ mentor (v) – hướng dẫn, cố vấn`;
     });
 
     function init() {
+      const sessionUsername = normalizeUsername(localStorage.getItem(ACCOUNT_SESSION_KEY));
+      activeAccount = loadAccounts().find(account => account.normalizedUsername === sessionUsername) || null;
+      if (!activeAccount) localStorage.removeItem(ACCOUNT_SESSION_KEY);
       loadEntries();
       loadEnrichmentCache();
       loadWrongGlobal();
       loadAdvancedStats();
       loadThemeState();
+      rawInput.value = appState.entries.length ? serializeEntriesToRaw(appState.entries) : "";
       renderPreview();
       renderMainWrongSummary();
       renderHardWords();
       renderCharts();
       renderAdvancedDashboard();
       updateStartButtonLabel();
+      updateAccountUI();
     }
 
     init();

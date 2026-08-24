@@ -2,6 +2,13 @@
 
 Ứng dụng học từ vựng tĩnh, chạy hoàn toàn trên trình duyệt và lưu dữ liệu bằng `localStorage`.
 
+## Tài khoản cục bộ
+
+- Người học có thể tạo tài khoản chỉ bằng tên đăng nhập và mật khẩu, sau đó đăng nhập/đăng xuất hoặc đổi tài khoản ngay trên trang.
+- Mỗi tài khoản có danh sách từ, trạng thái đánh dấu, từ sai và toàn bộ thống kê riêng. Dữ liệu chế độ khách cũ vẫn được giữ nguyên và không bị trộn vào tài khoản.
+- Mật khẩu không được lưu dạng văn bản thuần; ứng dụng tạo salt riêng và băm bằng PBKDF2-SHA-256 trước khi lưu.
+- Vì đây là ứng dụng tĩnh trên GitHub Pages, tài khoản và dữ liệu chỉ tồn tại trong trình duyệt trên thiết bị hiện tại; chưa có đồng bộ đa thiết bị hoặc khôi phục mật khẩu qua máy chủ.
+
 ## Đồng nghĩa, word family và collocation
 
 Mỗi mục từ hỗ trợ ba trường mở rộng:
@@ -72,6 +79,7 @@ Dữ liệu thống kê cũ được tự động chuyển sang schema mới. T�
 - Mỗi phiên chỉ được ghi một lần; phím tắt hoặc bấm kết thúc nhiều lần không nhân đôi lịch sử.
 - Có nút kết thúc phiên thủ công; phiên dở được ghi lại trước khi khởi động lại.
 - Ứng dụng vẫn hoạt động nếu Chart.js CDN không tải được; chỉ phần biểu đồ bị ẩn.
+- Phím tắt `N`, `F` và `1–4` không còn kích hoạt khi con trỏ đang ở ô nhập, textarea, select hoặc vùng soạn thảo; việc gõ đáp án không còn làm nhảy sang từ khác.
 
 ## Chạy local
 
