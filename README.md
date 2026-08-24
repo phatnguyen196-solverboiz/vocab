@@ -2,34 +2,43 @@
 
 Ứng dụng học từ vựng tĩnh, chạy hoàn toàn trên trình duyệt và lưu dữ liệu bằng `localStorage`.
 
-## Đồng nghĩa và word family
+## Đồng nghĩa, word family và collocation
 
-Mỗi mục từ hỗ trợ hai trường mở rộng:
+Mỗi mục từ hỗ trợ ba trường mở rộng:
 
 - `synonyms`: danh sách từ đồng nghĩa.
 - `wordFamily`: danh sách thành viên cùng họ từ, có thể kèm từ loại.
+- `collocations`: các cụm từ tự nhiên thường đi cùng mục từ.
 
 Có ba cách bổ sung dữ liệu:
 
 1. Thêm ngay trong dữ liệu dán vào:
 
    ```text
-   create (v) – tạo ra | syn: make, produce | family: noun: creation; adjective: creative; adverb: creatively
+   create (v) – tạo ra | syn: make, produce | family: noun: creation; adjective: creative; adverb: creatively | collocations: create an account, create opportunities
    ```
 
-2. Mở **Sửa đồng nghĩa / word family** ở từng mục trong phần Preview.
-3. Bấm **Gợi ý đồng nghĩa & word family** để lấy đề xuất từ Datamuse API.
+2. Mở **Sửa đồng nghĩa / word family / collocation** ở từng mục trong phần Preview.
+3. Bấm **Gợi ý đồng nghĩa, word family & collocation** để lấy đề xuất từ Datamuse API.
 
-Gợi ý tự động được cache 30 ngày. Đồng nghĩa dùng quan hệ WordNet `rel_syn`; word family dùng truy vấn hình thái theo gốc từ, sau đó lọc hậu tố và ưu tiên từ có tần suất cao. Đây là gợi ý heuristic, nên người học vẫn cần kiểm tra theo ngữ cảnh và có thể sửa thủ công.
+Gợi ý tự động được cache 30 ngày. Đồng nghĩa dùng quan hệ WordNet `rel_syn`; word family dùng truy vấn hình thái theo gốc từ, sau đó lọc hậu tố và ưu tiên từ có tần suất cao. Collocation kết hợp các quan hệ từ thường đứng trước `rel_bgb` và đứng sau `rel_bga`. Đây là gợi ý heuristic, nên người học vẫn cần kiểm tra theo ngữ cảnh và có thể sửa thủ công.
 
 ## Chế độ học mới
 
 - **Từ đồng nghĩa**: chọn từ đồng nghĩa đúng.
 - **Word family**: chọn thành viên thuộc cùng họ từ.
-- Flashcard hiển thị nghĩa, đồng nghĩa và word family ở mặt sau.
+- **Collocation**: chọn cụm từ tự nhiên có chứa từ đang học.
+- **Từ đã đánh dấu**: học riêng các mục đã bấm sao trong Preview; trạng thái sao được lưu cùng dữ liệu cục bộ.
+- Flashcard hiển thị nghĩa, đồng nghĩa, word family và collocation ở mặt sau.
 - Sau mỗi đáp án, khối **Ghi nhớ thêm** hiện toàn bộ dữ liệu mở rộng của từ.
 
 Nếu nhóm đang chọn chưa có dữ liệu phù hợp, ứng dụng sẽ hướng dẫn bổ sung thay vì bắt đầu một phiên trống.
+
+## Xuất và nhập lại Word
+
+- **Xuất Word (.docx)** tạo một learning pack có bảng từ, nghĩa, đồng nghĩa, word family và collocation.
+- File có thêm vùng dữ liệu tái nhập. Có thể sửa các dòng này trong Word rồi dùng **Nhập lại từ Word** để đưa danh sách trở lại web.
+- Việc xuất/nhập chạy ngay trong trình duyệt. Thư viện DOCX và JSZip chỉ được tải khi người dùng bấm chức năng tương ứng.
 
 ## Thống kê nâng cao
 
