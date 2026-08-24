@@ -451,6 +451,51 @@
       font-size:14px;
     }
 
+    .game-showcase{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .game-pick{
+      text-align:left;
+      padding:12px;
+      border:1px solid #d9e5ff;
+      border-radius:14px;
+      background:linear-gradient(145deg,#fff,#f3f7ff);
+      color:var(--text);
+      box-shadow:none;
+      min-height:82px;
+    }
+
+    .game-pick:hover{
+      transform:translateY(-2px);
+      border-color:#93b4ff;
+      box-shadow:0 8px 20px rgba(37,99,235,.09);
+    }
+
+    .game-pick .game-icon{
+      font-size:22px;
+      margin-right:6px;
+    }
+
+    .game-pick .game-name{
+      font-weight:800;
+    }
+
+    .game-pick .game-desc{
+      display:block;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.4;
+    }
+
+    body.dark .game-pick{
+      background:linear-gradient(145deg,#172033,#0f172a);
+      border-color:#2d3f5f;
+    }
+
     .screen{ display:none; }
     .screen.active{
       display:block;
@@ -616,6 +661,158 @@
       background:var(--danger-bg);
       border-color:#f2a0a6;
       color:#991b1b;
+    }
+
+    .game-hud{
+      display:none;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+      padding:10px 12px;
+      margin-bottom:14px;
+      border:1px solid #cfe0ff;
+      border-radius:14px;
+      background:linear-gradient(90deg,#eff6ff,#f5f3ff);
+      color:#365486;
+      font-weight:800;
+      font-size:13px;
+    }
+
+    body.dark .game-hud{
+      background:linear-gradient(90deg,#152238,#211a38);
+      border-color:#334a70;
+      color:#b8d0ff;
+    }
+
+    .memory-board{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:10px;
+    }
+
+    .memory-card{
+      min-height:94px;
+      padding:10px;
+      border-radius:16px;
+      border:2px solid #dbe7ff;
+      background:linear-gradient(145deg,#2563eb,#7c3aed);
+      color:transparent;
+      font-weight:800;
+      line-height:1.35;
+      box-shadow:0 8px 18px rgba(37,99,235,.15);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .memory-card::after{
+      content:"?";
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      color:#fff;
+      font-size:30px;
+    }
+
+    .memory-card.is-open,
+    .memory-card.is-matched{
+      background:#fff;
+      color:#1f3a5f;
+      border-color:#93b4ff;
+      transform:rotateY(0);
+    }
+
+    .memory-card.is-open::after,
+    .memory-card.is-matched::after{display:none}
+
+    .memory-card.is-matched{
+      background:#ecfdf3;
+      border-color:#6fd391;
+      color:#166534;
+      box-shadow:0 8px 18px rgba(34,197,94,.12);
+    }
+
+    body.dark .memory-card.is-open,
+    body.dark .memory-card.is-matched{
+      background:#142238;
+      color:#dbeafe;
+    }
+
+    .scramble-tiles{
+      display:flex;
+      justify-content:center;
+      flex-wrap:wrap;
+      gap:8px;
+      margin:4px 0 18px;
+    }
+
+    .letter-tile{
+      min-width:38px;
+      padding:10px 9px;
+      border-radius:11px;
+      background:linear-gradient(145deg,#fef3c7,#fde68a);
+      border:1px solid #f6c453;
+      color:#92400e;
+      font-size:20px;
+      font-weight:900;
+      text-transform:uppercase;
+      box-shadow:0 5px 12px rgba(217,119,6,.1);
+    }
+
+    .letter-space{
+      width:16px;
+    }
+
+    .catch-grid{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .catch-grid .option{
+      min-height:92px;
+      text-align:center;
+      border-radius:50px 24px 50px 24px;
+      font-size:17px;
+      background:linear-gradient(145deg,#e0f2fe,#ede9fe);
+      border-color:#c4d9ff;
+    }
+
+    body.dark .catch-grid .option{
+      background:linear-gradient(145deg,#17304a,#2a214a);
+      border-color:#3f5f87;
+      color:#e5eefc;
+    }
+
+    .truth-card{
+      padding:24px;
+      margin-bottom:14px;
+      text-align:center;
+      border-radius:20px;
+      border:2px dashed #93b4ff;
+      background:linear-gradient(145deg,#eff6ff,#f5f3ff);
+    }
+
+    .truth-card .truth-meaning{
+      font-size:24px;
+      font-weight:800;
+      line-height:1.45;
+    }
+
+    body.dark .truth-card{
+      background:linear-gradient(145deg,#142238,#211a38);
+      border-color:#4d6f9f;
+    }
+
+    .truth-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .truth-actions button{
+      min-height:68px;
+      font-size:18px;
+      border-radius:18px;
     }
 
     .typing-area{
@@ -883,6 +1080,13 @@
       .dashboard-grid{
         grid-template-columns:1fr;
       }
+      .memory-board{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+      }
+      .catch-grid,
+      .game-showcase{
+        grid-template-columns:1fr;
+      }
     }
   </style>
 </head>
@@ -975,8 +1179,15 @@ Listening - UNIT 2
             <div class="study-banner">
               <h3>3) Chuẩn bị học</h3>
               <p>
-                Bấm <b>Bắt đầu học</b> để chuyển sang khu học riêng với quiz, flashcard, học lại từ sai, biểu đồ thống kê và nhiều chế độ nâng cao.
+                Chọn học truyền thống hoặc một trò chơi bên dưới. Điểm game vẫn được lưu vào streak và thống kê học tập.
               </p>
+            </div>
+
+            <div class="game-showcase" aria-label="Chọn nhanh trò chơi từ vựng">
+              <button class="game-pick" data-game-mode="memory-match" type="button"><span class="game-icon">🧠</span><span class="game-name">Lật thẻ trí nhớ</span><span class="game-desc">Tìm đúng cặp từ Anh – nghĩa Việt với ít lượt lật nhất.</span></button>
+              <button class="game-pick" data-game-mode="word-scramble" type="button"><span class="game-icon">🔤</span><span class="game-name">Xếp chữ</span><span class="game-desc">Giải mã các chữ cái bị đảo dựa trên nghĩa tiếng Việt.</span></button>
+              <button class="game-pick" data-game-mode="word-catch" type="button"><span class="game-icon">🎯</span><span class="game-name">Bắt từ</span><span class="game-desc">Chạm thật nhanh từ tiếng Anh đúng trước khi hết giờ.</span></button>
+              <button class="game-pick" data-game-mode="true-false" type="button"><span class="game-icon">⚡</span><span class="game-name">Đúng/Sai chớp nhoáng</span><span class="game-desc">Phán đoán cặp từ – nghĩa trong 6 giây.</span></button>
             </div>
 
             <div class="row" style="margin-top:0">
@@ -998,6 +1209,12 @@ Listening - UNIT 2
                   <option value="word-family">Word family</option>
                   <option value="collocation">Collocation</option>
                   <option value="marked-only">Từ đã đánh dấu</option>
+                  <optgroup label="🎮 Trò chơi từ vựng">
+                    <option value="memory-match">🧠 Lật thẻ trí nhớ</option>
+                    <option value="word-scramble">🔤 Xếp chữ</option>
+                    <option value="word-catch">🎯 Bắt từ</option>
+                    <option value="true-false">⚡ Đúng/Sai chớp nhoáng</option>
+                  </optgroup>
                   <option value="speed">Speed mode</option>
                   <option value="wrong-only">Học lại từ sai</option>
                 </select>
@@ -1102,8 +1319,11 @@ Listening - UNIT 2
           <div class="mode-badge" id="quizBadge">Chưa bắt đầu</div>
 
           <div id="quizBody">
+            <div id="gameHud" class="game-hud"><span id="gameHudMain">🎮 Game mode</span><span id="gameHudScore">Điểm 0</span></div>
             <div class="question-word" id="questionWord">Chưa có câu hỏi</div>
             <div class="question-note" id="questionNote">Hãy bắt đầu phiên học.</div>
+
+            <div id="gameArea" style="display:none;"></div>
 
             <div id="timerWrap" style="display:none; margin-bottom:14px;">
               <div style="display:flex; justify-content:space-between; color:var(--muted); font-size:14px; margin-bottom:6px;">
@@ -1158,7 +1378,7 @@ Listening - UNIT 2
             <div id="feedbackBox" class="feedback"></div>
             <div id="lexicalStudyPanel" class="lexical-study-panel"></div>
 
-            <div class="quiz-actions">
+            <div class="quiz-actions" id="quizActions">
               <button id="nextBtn" class="btn-secondary">Câu tiếp theo</button>
               <button id="skipBtn" class="btn-secondary">Bỏ qua</button>
             </div>
@@ -1252,6 +1472,7 @@ Listening - UNIT 2
     const ENRICHMENT_CACHE_KEY = "vocab_paste_learn_pro_lexical_cache_v6";
     const ENRICHMENT_CACHE_TTL = 30 * 24 * 60 * 60 * 1000;
     const DATAMUSE_API = "https://api.datamuse.com/words";
+    const GAME_MODES = new Set(["memory-match", "word-scramble", "word-catch", "true-false"]);
     const COLLOCATION_STOPWORDS = new Set([
       "a", "an", "the", "and", "or", "of", "to", "in", "on", "for", "with", "as", "by", "from", "at",
       "his", "her", "its", "their", "our", "your", "my", "this", "that", "these", "those", "who", "whom", "whose", "which", "when", "where", "how",
@@ -1295,7 +1516,13 @@ Listening - UNIT 2
       flashcardFlipped: false,
       timerId: null,
       timerTotal: 10,
-      timerLeft: 10
+      timerLeft: 10,
+      autoNextId: null,
+      gameMoves: 0,
+      gameMistakes: 0,
+      gameMatches: 0,
+      memoryFirstCard: null,
+      memoryLocked: false
     };
 
     const rawInput = document.getElementById("rawInput");
@@ -1340,6 +1567,10 @@ Listening - UNIT 2
     const quizBadge = document.getElementById("quizBadge");
     const questionWord = document.getElementById("questionWord");
     const questionNote = document.getElementById("questionNote");
+    const gameArea = document.getElementById("gameArea");
+    const gameHud = document.getElementById("gameHud");
+    const gameHudMain = document.getElementById("gameHudMain");
+    const gameHudScore = document.getElementById("gameHudScore");
     const optionsBox = document.getElementById("optionsBox");
     const typingArea = document.getElementById("typingArea");
     const multipleArea = document.getElementById("multipleArea");
@@ -1350,6 +1581,7 @@ Listening - UNIT 2
     const lexicalStudyPanel = document.getElementById("lexicalStudyPanel");
     const nextBtn = document.getElementById("nextBtn");
     const skipBtn = document.getElementById("skipBtn");
+    const quizActions = document.getElementById("quizActions");
 
     const timerWrap = document.getElementById("timerWrap");
     const timerText = document.getElementById("timerText");
@@ -2240,6 +2472,10 @@ Listening - UNIT 2
       return appState.selectedMode;
     }
 
+    function isGameMode(mode = appState.selectedMode) {
+      return GAME_MODES.has(mode);
+    }
+
     function completedSessionCount() {
       return appState.attempted + appState.skipped;
     }
@@ -2267,6 +2503,12 @@ Listening - UNIT 2
       appState.finished = false;
       appState.sessionStartedAt = Date.now();
       appState.sessionRecorded = false;
+      appState.gameMoves = 0;
+      appState.gameMistakes = 0;
+      appState.gameMatches = 0;
+      appState.memoryFirstCard = null;
+      appState.memoryLocked = false;
+      clearGameAdvance();
 
       if (!appState.quizPool.length) {
         if (appState.selectedMode === "wrong-only") {
@@ -2285,30 +2527,30 @@ Listening - UNIT 2
         return;
       }
 
+      if (["word-catch", "true-false"].includes(appState.selectedMode) && appState.quizPool.length < 2) {
+        alert("Trò chơi này cần ít nhất 2 từ trong nhóm để tạo phương án đối chiếu.");
+        return;
+      }
+
       studySubtext.textContent =
-        `${appState.selectedGroup === "__all__" ? "Tất cả nhóm" : appState.selectedGroup} • ${
-          appState.selectedMode === "multiple" ? "Trắc nghiệm" :
-          appState.selectedMode === "typing" ? "Nhập nghĩa tiếng Việt" :
-          appState.selectedMode === "mixed" ? "Trộn" :
-           appState.selectedMode === "flashcard" ? "Flashcard" :
-           appState.selectedMode === "vi-to-en" ? "Việt → Anh" :
-            appState.selectedMode === "synonym" ? "Từ đồng nghĩa" :
-            appState.selectedMode === "word-family" ? "Word family" :
-            appState.selectedMode === "collocation" ? "Collocation" :
-            appState.selectedMode === "marked-only" ? "Từ đã đánh dấu" :
-           appState.selectedMode === "speed" ? "Speed mode" : "Học lại từ sai"
-        }`;
+        `${appState.selectedGroup === "__all__" ? "Tất cả nhóm" : appState.selectedGroup} • ${modeLabel(appState.selectedMode)}`;
 
       feedbackBox.className = "feedback";
       feedbackBox.innerHTML = "";
       finishBox.style.display = "none";
       quizBody.style.display = "block";
+      gameArea.style.display = "none";
+      gameArea.className = "";
+      gameArea.innerHTML = "";
+      gameHud.style.display = "none";
+      quizActions.style.display = "flex";
 
       updateStudyStats();
       renderWrongList();
       renderHardWords();
       switchScreen(studyScreen);
-      loadNextQuestion();
+      if (appState.selectedMode === "memory-match") startMemoryRound();
+      else loadNextQuestion();
       setTimeout(renderCharts, 0);
     }
 
@@ -2432,6 +2674,259 @@ Listening - UNIT 2
       timerWrap.style.display = "none";
     }
 
+    function clearGameAdvance() {
+      if (appState.autoNextId) {
+        clearTimeout(appState.autoNextId);
+        appState.autoNextId = null;
+      }
+    }
+
+    function scheduleGameAdvance(delay = 700) {
+      clearGameAdvance();
+      appState.autoNextId = setTimeout(() => {
+        appState.autoNextId = null;
+        if (!appState.finished) loadNextQuestion();
+      }, delay);
+    }
+
+    function updateGameHud() {
+      gameHud.style.display = "flex";
+      if (appState.selectedMode === "memory-match") {
+        const score = Math.max(0, appState.gameMatches * 120 - appState.gameMistakes * 25);
+        gameHudMain.textContent = `🧠 ${appState.gameMatches} cặp đúng • ${appState.gameMoves} lượt lật đôi`;
+        gameHudScore.textContent = `Điểm ${score} • Lỡ ${appState.gameMistakes}`;
+        return;
+      }
+      const score = appState.correct * 100 + appState.streak * 20;
+      gameHudMain.textContent = `${modeLabel(appState.selectedMode)} • Combo x${appState.streak}`;
+      gameHudScore.textContent = `Điểm ${score}`;
+    }
+
+    function recordMemoryMatch(item) {
+      appState.currentQuestion = item;
+      appState.currentMode = "memory-match";
+      appState.attempted += 1;
+      appState.correct += 1;
+      appState.streak += 1;
+      appState.gameMatches += 1;
+      appState.bestSessionStreak = Math.max(appState.bestSessionStreak, appState.streak);
+      decreaseHardWord(item);
+      recordAnswerStats(true, item);
+      beep("good");
+      animateCard("good");
+      burstConfetti();
+      updateStudyStats();
+      updateGameHud();
+      renderHardWords();
+    }
+
+    function startMemoryRound() {
+      if (appState.finished) return;
+      clearTimer();
+      clearGameAdvance();
+      if (appState.targetCount < 9999 && completedSessionCount() >= appState.targetCount) {
+        showFinishScreen();
+        return;
+      }
+
+      appState.currentMode = "memory-match";
+      appState.currentQuestion = null;
+      appState.answered = false;
+      appState.memoryFirstCard = null;
+      appState.memoryLocked = false;
+      clearFeedback();
+      multipleArea.style.display = "none";
+      typingArea.style.display = "none";
+      flashcardArea.style.display = "none";
+      quizActions.style.display = "none";
+      questionWord.textContent = "Lật thẻ trí nhớ";
+      questionNote.textContent = "Ghép từ tiếng Anh với nghĩa tiếng Việt. Cố gắng dùng ít lượt lật nhất!";
+      quizBadge.textContent = `${appState.selectedGroup === "__all__" ? "Tất cả nhóm" : appState.selectedGroup} • ${modeLabel("memory-match")}`;
+
+      const remaining = appState.targetCount >= 9999 ? 6 : Math.max(1, appState.targetCount - completedSessionCount());
+      const pairCount = Math.max(1, Math.min(6, remaining, appState.quizPool.length));
+      const roundItems = shuffle(appState.quizPool).slice(0, pairCount);
+      const cards = shuffle(roundItems.flatMap((item, index) => [
+        { pairId: `pair-${index}`, kind: "word", label: item.word, item },
+        { pairId: `pair-${index}`, kind: "meaning", label: item.meaning, item }
+      ]));
+
+      gameArea.className = "memory-board";
+      gameArea.style.display = "grid";
+      gameArea.innerHTML = "";
+      cards.forEach(data => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "memory-card";
+        button.textContent = data.label;
+        button.setAttribute("aria-label", "Thẻ đang úp");
+        button.onclick = () => {
+          if (appState.memoryLocked || button.classList.contains("is-open") || button.classList.contains("is-matched")) return;
+          button.classList.add("is-open");
+          button.setAttribute("aria-label", data.label);
+          if (!appState.memoryFirstCard) {
+            appState.memoryFirstCard = { button, data };
+            return;
+          }
+
+          const first = appState.memoryFirstCard;
+          appState.memoryFirstCard = null;
+          appState.gameMoves += 1;
+          const matched = first.data.pairId === data.pairId && first.data.kind !== data.kind;
+          if (matched) {
+            first.button.classList.remove("is-open");
+            button.classList.remove("is-open");
+            first.button.classList.add("is-matched");
+            button.classList.add("is-matched");
+            first.button.disabled = true;
+            button.disabled = true;
+            recordMemoryMatch(data.item);
+            const allMatched = gameArea.querySelectorAll(".memory-card.is-matched").length === cards.length;
+            if (appState.targetCount < 9999 && completedSessionCount() >= appState.targetCount) {
+              appState.autoNextId = setTimeout(() => showFinishScreen(), 650);
+            } else if (allMatched) {
+              appState.autoNextId = setTimeout(() => startMemoryRound(), 750);
+            }
+          } else {
+            appState.gameMistakes += 1;
+            appState.streak = 0;
+            appState.memoryLocked = true;
+            beep("bad");
+            animateCard("bad");
+            updateStudyStats();
+            updateGameHud();
+            setTimeout(() => {
+              first.button.classList.remove("is-open");
+              button.classList.remove("is-open");
+              first.button.setAttribute("aria-label", "Thẻ đang úp");
+              button.setAttribute("aria-label", "Thẻ đang úp");
+              appState.memoryLocked = false;
+            }, 650);
+          }
+        };
+        gameArea.appendChild(button);
+      });
+      updateGameHud();
+      updateStudyStats();
+    }
+
+    function scrambleLetters(word) {
+      return String(word || "")
+        .split(" ")
+        .map(part => {
+          if (part.length < 3) return part;
+          let scrambled = part;
+          for (let attempt = 0; attempt < 8 && normalizeWord(scrambled) === normalizeWord(part); attempt++) {
+            scrambled = shuffle([...part]).join("");
+          }
+          return scrambled;
+        })
+        .join(" ");
+    }
+
+    function renderWordScramble(q) {
+      multipleArea.style.display = "none";
+      flashcardArea.style.display = "none";
+      typingArea.style.display = "grid";
+      quizActions.style.display = "flex";
+      typingInput.value = "";
+      typingInput.placeholder = "Nhập từ tiếng Anh đã giải mã...";
+      questionWord.textContent = q.meaning;
+      questionNote.textContent = "Sắp xếp các chữ cái thành từ/cụm từ tiếng Anh đúng.";
+      const answer = String(q.word || "").split("/")[0].trim();
+      const scrambled = scrambleLetters(answer);
+      gameArea.className = "scramble-tiles";
+      gameArea.style.display = "flex";
+      gameArea.innerHTML = [...scrambled].map(char => char === " "
+        ? `<span class="letter-space" aria-hidden="true"></span>`
+        : `<span class="letter-tile">${escapeHtml(char)}</span>`).join("");
+      updateGameHud();
+      setTimeout(() => typingInput.focus(), 50);
+    }
+
+    function getWordOptions(q) {
+      const answers = [q.word];
+      shuffle(appState.quizPool).some(item => {
+        if (answers.length >= 4) return true;
+        if (normalizeWord(item.word) !== normalizeWord(q.word)) answers.push(item.word);
+        return false;
+      });
+      return shuffle(uniqueStrings(answers));
+    }
+
+    function renderWordCatch(q) {
+      typingArea.style.display = "none";
+      flashcardArea.style.display = "none";
+      multipleArea.style.display = "block";
+      quizActions.style.display = "none";
+      gameArea.style.display = "none";
+      questionWord.textContent = q.meaning;
+      questionNote.textContent = "Bắt đúng từ tiếng Anh trước khi đồng hồ về 0!";
+      optionsBox.className = "options catch-grid";
+      optionsBox.innerHTML = "";
+      getWordOptions(q).forEach(option => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "option";
+        button.textContent = option;
+        const isAnswer = normalizeWord(option) === normalizeWord(q.word);
+        button.dataset.correct = isAnswer ? "true" : "false";
+        button.onclick = () => {
+          if (appState.answered) return;
+          optionsBox.querySelectorAll(".option").forEach(item => {
+            item.disabled = true;
+            if (item.dataset.correct === "true") item.classList.add("correct");
+          });
+          button.classList.add(isAnswer ? "correct" : "wrong");
+          showFeedback(isAnswer
+            ? `🎯 Bắt trúng! <b>${escapeHtml(q.word)}</b> = <b>${escapeHtml(q.meaning)}</b>`
+            : `💨 Trượt rồi! Đáp án là <b>${escapeHtml(q.word)}</b>.`, isAnswer ? "good" : "bad");
+          finishAnswer(isAnswer, q);
+          updateGameHud();
+          scheduleGameAdvance(750);
+        };
+        optionsBox.appendChild(button);
+      });
+      updateGameHud();
+      startTimer(8);
+    }
+
+    function renderTrueFalse(q) {
+      multipleArea.style.display = "none";
+      typingArea.style.display = "none";
+      flashcardArea.style.display = "none";
+      quizActions.style.display = "none";
+      questionWord.textContent = q.word;
+      questionNote.textContent = "Cặp từ – nghĩa này đúng hay sai?";
+      const alternatives = appState.quizPool.filter(item => normalizeMeaning(item.meaning) !== normalizeMeaning(q.meaning));
+      const showCorrect = Math.random() < 0.5 || !alternatives.length;
+      const shownMeaning = showCorrect ? q.meaning : alternatives[Math.floor(Math.random() * alternatives.length)].meaning;
+      gameArea.className = "";
+      gameArea.style.display = "block";
+      gameArea.innerHTML = `
+        <div class="truth-card"><div class="truth-meaning">${escapeHtml(shownMeaning)}</div></div>
+        <div class="truth-actions">
+          <button class="btn-primary" type="button" data-truth="true">✅ Đúng</button>
+          <button class="btn-danger" type="button" data-truth="false">❌ Sai</button>
+        </div>`;
+      gameArea.querySelectorAll("[data-truth]").forEach(button => {
+        button.onclick = () => {
+          if (appState.answered) return;
+          const choice = button.dataset.truth === "true";
+          const isCorrect = choice === showCorrect;
+          gameArea.querySelectorAll("button").forEach(item => item.disabled = true);
+          showFeedback(isCorrect
+            ? `⚡ Chính xác! <b>${escapeHtml(q.word)}</b> = <b>${escapeHtml(q.meaning)}</b>`
+            : `💥 Chưa đúng. <b>${escapeHtml(q.word)}</b> = <b>${escapeHtml(q.meaning)}</b>`, isCorrect ? "good" : "bad");
+          finishAnswer(isCorrect, q);
+          updateGameHud();
+          scheduleGameAdvance(700);
+        };
+      });
+      updateGameHud();
+      startTimer(6);
+    }
+
     function startTimer(seconds = 10) {
       clearTimer();
       appState.timerTotal = seconds;
@@ -2449,8 +2944,21 @@ Listening - UNIT 2
         if (appState.timerLeft <= 0) {
           clearTimer();
           if (!appState.answered && appState.currentQuestion) {
+            if (appState.currentMode === "word-catch") {
+              optionsBox.querySelectorAll(".option").forEach(item => {
+                item.disabled = true;
+                if (item.dataset.correct === "true") item.classList.add("correct");
+              });
+            }
+            if (appState.currentMode === "true-false") {
+              gameArea.querySelectorAll("button").forEach(item => item.disabled = true);
+            }
             showFeedback(`⏰ Hết giờ!<br><b>${escapeHtml(appState.currentQuestion.word)}</b> = <b>${escapeHtml(appState.currentQuestion.meaning)}</b>`, "bad");
             finishAnswer(false, appState.currentQuestion);
+            if (["word-catch", "true-false"].includes(appState.currentMode)) {
+              updateGameHud();
+              scheduleGameAdvance(700);
+            }
           }
         }
       }, 1000);
@@ -2781,6 +3289,26 @@ Listening - UNIT 2
       const q = appState.currentQuestion;
       const answer = typingInput.value.trim();
 
+      if (appState.currentMode === "word-scramble") {
+        if (revealOnly) {
+          showFeedback(`🧩 Đáp án là: <b>${escapeHtml(q.word)}</b>`, "warn");
+          finishAnswer(false, q);
+          updateGameHud();
+          return;
+        }
+        if (!answer) {
+          showFeedback("⚠️ Bạn chưa nhập đáp án.", "warn");
+          return;
+        }
+        const ok = isEnglishAnswerCorrect(answer, q.word);
+        showFeedback(ok
+          ? `🔤 Giải mã thành công! <b>${escapeHtml(q.word)}</b>`
+          : `🧩 Chưa đúng. Đáp án là <b>${escapeHtml(q.word)}</b>.`, ok ? "good" : "bad");
+        finishAnswer(ok, q);
+        updateGameHud();
+        return;
+      }
+
       if (appState.currentMode === "typing") {
         if (revealOnly) {
           clearTimer();
@@ -2844,23 +3372,22 @@ Listening - UNIT 2
       appState.currentQuestion = q;
       appState.currentMode = randomMode();
       appState.answered = false;
+      clearGameAdvance();
       clearFeedback();
       clearTimer();
       flashcardArea.style.display = "none";
+      gameArea.style.display = "none";
+      gameArea.className = "";
+      gameArea.innerHTML = "";
+      gameHud.style.display = isGameMode(appState.currentMode) ? "flex" : "none";
+      quizActions.style.display = "flex";
+      optionsBox.className = "options";
 
       quizCard.classList.remove("card-appear");
       void quizCard.offsetWidth;
       quizCard.classList.add("card-appear");
 
-      quizBadge.textContent =
-        `${q.group} • ${
-          appState.currentMode === "multiple" ? "Trắc nghiệm" :
-          appState.currentMode === "typing" ? "Nhập nghĩa" :
-          appState.currentMode === "flashcard" ? "Flashcard" :
-          appState.currentMode === "vi-to-en" ? "Việt → Anh" :
-          appState.currentMode === "synonym" ? "Từ đồng nghĩa" :
-          appState.currentMode === "collocation" ? "Collocation" : "Word family"
-        }`;
+      quizBadge.textContent = `${q.group} • ${modeLabel(appState.currentMode)}`;
 
       if (appState.currentMode === "multiple") {
         questionWord.textContent = q.word;
@@ -2888,6 +3415,12 @@ Listening - UNIT 2
         questionWord.textContent = q.word;
         questionNote.textContent = "Chọn collocation tự nhiên có chứa từ này.";
         renderLexicalMultiple(q, "collocation");
+      } else if (appState.currentMode === "word-scramble") {
+        renderWordScramble(q);
+      } else if (appState.currentMode === "word-catch") {
+        renderWordCatch(q);
+      } else if (appState.currentMode === "true-false") {
+        renderTrueFalse(q);
       }
 
       if (appState.selectedMode === "speed") startTimer(10);
@@ -2942,6 +3475,10 @@ Listening - UNIT 2
         "word-family": "Word family",
         collocation: "Collocation",
         "marked-only": "Từ đã đánh dấu",
+        "memory-match": "🧠 Lật thẻ trí nhớ",
+        "word-scramble": "🔤 Xếp chữ",
+        "word-catch": "🎯 Bắt từ",
+        "true-false": "⚡ Đúng/Sai chớp nhoáng",
         speed: "Speed",
         "wrong-only": "Học từ sai"
       }[mode] || mode || "Không rõ";
@@ -3173,6 +3710,7 @@ Listening - UNIT 2
       }
       appState.finished = true;
       clearTimer();
+      clearGameAdvance();
       quizBody.style.display = "none";
       finishBox.style.display = "block";
 
@@ -3189,6 +3727,9 @@ Listening - UNIT 2
         <b>${wrongNum}</b> lượt sai •
         <b>${appState.skipped}</b> câu bỏ qua •
         streak tốt nhất <b>${appState.bestSessionStreak}</b>.
+        ${appState.selectedMode === "memory-match"
+          ? `<br>🧠 Đã ghép <b>${appState.gameMatches}</b> cặp trong <b>${appState.gameMoves}</b> lượt lật đôi, lỡ <b>${appState.gameMistakes}</b> lần.`
+          : isGameMode(appState.selectedMode) ? `<br>🎮 Điểm game: <b>${appState.correct * 100 + appState.bestSessionStreak * 20}</b>.` : ""}
       `;
     }
 
@@ -3538,7 +4079,24 @@ mentor (v) – hướng dẫn, cố vấn`;
       startStudySession(false);
     });
 
+    function updateStartButtonLabel() {
+      startQuizBtn.textContent = isGameMode(modeSelect.value)
+        ? `Chơi ngay: ${modeLabel(modeSelect.value).replace(/^[^\p{L}\p{N}]+/u, "")}`
+        : "Bắt đầu học";
+    }
+
+    document.querySelectorAll(".game-pick").forEach(button => {
+      button.addEventListener("click", () => {
+        modeSelect.value = button.dataset.gameMode;
+        updateStartButtonLabel();
+        startQuizBtn.focus();
+      });
+    });
+    modeSelect.addEventListener("change", updateStartButtonLabel);
+
     backToMainBtn.addEventListener("click", () => {
+      clearTimer();
+      clearGameAdvance();
       switchScreen(mainScreen);
       setTimeout(renderAdvancedDashboard, 0);
     });
@@ -3663,6 +4221,7 @@ mentor (v) – hướng dẫn, cố vấn`;
       renderHardWords();
       renderCharts();
       renderAdvancedDashboard();
+      updateStartButtonLabel();
     }
 
     init();

@@ -34,6 +34,14 @@ Gợi ý tự động được cache 30 ngày. Đồng nghĩa dùng quan hệ Wo
 
 Nếu nhóm đang chọn chưa có dữ liệu phù hợp, ứng dụng sẽ hướng dẫn bổ sung thay vì bắt đầu một phiên trống.
 
+## Trò chơi từ vựng
+
+- **Lật thẻ trí nhớ**: ghép cặp từ tiếng Anh – nghĩa tiếng Việt; tính số lượt lật, số lần lỡ và điểm.
+- **Xếp chữ**: đảo chữ của từ/cụm từ tiếng Anh rồi yêu cầu giải mã theo nghĩa tiếng Việt.
+- **Bắt từ**: chọn nhanh từ tiếng Anh đúng trong các “bong bóng” trước khi hết 8 giây.
+- **Đúng/Sai chớp nhoáng**: phán đoán cặp từ – nghĩa trong 6 giây.
+- Các game dùng chung bộ lọc nhóm, số câu, streak, từ sai và dashboard thống kê với các chế độ học khác.
+
 ## Xuất và nhập lại Word
 
 - **Xuất Word (.docx)** tạo một learning pack có bảng từ, nghĩa, đồng nghĩa, word family và collocation.
