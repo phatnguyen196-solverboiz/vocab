@@ -1131,6 +1131,99 @@
       background:linear-gradient(90deg,#2563eb,#22c55e);
     }
 
+    .analytics-head{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:12px;
+    }
+
+    .analytics-head h4{margin:4px 0 0}
+
+    .analytics-toolbar{
+      display:flex;
+      align-items:end;
+      gap:9px;
+      flex-wrap:wrap;
+    }
+
+    .analytics-toolbar label{
+      display:grid;
+      gap:4px;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:800;
+    }
+
+    .analytics-toolbar select{
+      min-width:145px;
+      padding:8px 10px;
+      font-size:13px;
+    }
+
+    .error-summary-grid{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:9px;
+      margin:12px 0;
+    }
+
+    .error-summary-card{
+      padding:11px;
+      border:1px solid var(--line);
+      border-radius:13px;
+      background:rgba(248,250,252,.72);
+    }
+
+    body.dark .error-summary-card{background:rgba(15,23,42,.7)}
+
+    .error-summary-card .label{color:var(--muted);font-size:12px;margin-bottom:4px}
+    .error-summary-card .value{font-size:22px;font-weight:900}
+
+    .error-analysis-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .error-analysis-box{
+      min-width:0;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:rgba(248,250,252,.55);
+    }
+
+    body.dark .error-analysis-box{background:rgba(15,23,42,.55)}
+    .error-analysis-box h5{margin:0 0 9px;font-size:14px}
+
+    .error-bar-list{display:grid;gap:10px}
+
+    .error-bar-row{
+      display:grid;
+      grid-template-columns:minmax(85px,1fr) minmax(70px,1.2fr) 44px;
+      gap:7px;
+      align-items:center;
+      font-size:12px;
+    }
+
+    .error-bar-track{height:9px;border-radius:999px;background:#e8eef6;overflow:hidden}
+    body.dark .error-bar-track{background:#1e293b}
+    .error-bar-fill{height:100%;border-radius:inherit;background:linear-gradient(90deg,#f59e0b,#ef4444)}
+
+    .recommendation-list{display:grid;gap:8px}
+
+    .recommendation-item{
+      padding:9px 10px;
+      border-left:3px solid #2563eb;
+      border-radius:8px;
+      background:rgba(37,99,235,.07);
+      font-size:13px;
+      line-height:1.5;
+    }
+
     .performance-list{
       display:grid;
       gap:9px;
@@ -1302,6 +1395,15 @@
       }
       .study-heatmap{
         grid-template-columns:repeat(7,minmax(14px,1fr));
+      }
+      .error-summary-grid,
+      .error-analysis-grid{
+        grid-template-columns:1fr;
+      }
+      .analytics-toolbar,
+      .analytics-toolbar label,
+      .analytics-toolbar select{
+        width:100%;
       }
     }
   </style>
@@ -1528,6 +1630,41 @@ Listening - UNIT 2
           <div class="dashboard-panel">
             <h4>Các phiên gần đây</h4>
             <div id="recentSessions" class="performance-list"><div class="empty">Chưa có phiên hoàn thành.</div></div>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-panel wide">
+            <div class="analytics-head">
+              <h4>Phân tích lỗi sai theo nhóm</h4>
+              <div class="analytics-toolbar">
+                <label>Nhóm từ
+                  <select id="errorGroupSelect"><option value="__all__">Tất cả nhóm</option></select>
+                </label>
+                <label>Khoảng thời gian
+                  <select id="errorPeriodSelect">
+                    <option value="7">7 ngày</option>
+                    <option value="30" selected>30 ngày</option>
+                    <option value="all">Toàn bộ</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+            <div id="groupErrorInsight" class="insight-banner">Học vài câu để hệ thống nhận diện mẫu lỗi theo nhóm.</div>
+            <div id="groupErrorSummary" class="error-summary-grid"></div>
+            <div class="error-analysis-grid">
+              <div class="error-analysis-box">
+                <h5>Dạng bài gây sai</h5>
+                <div id="groupErrorModes" class="error-bar-list"><div class="empty">Chưa có dữ liệu.</div></div>
+              </div>
+              <div class="error-analysis-box">
+                <h5>Từ gây khó khăn</h5>
+                <div id="groupErrorWords" class="performance-list"><div class="empty">Chưa có dữ liệu.</div></div>
+              </div>
+              <div class="error-analysis-box">
+                <h5>Đề xuất luyện tập</h5>
+                <div id="groupErrorRecommendations" class="recommendation-list"><div class="empty">Chưa có đề xuất.</div></div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="dashboard-grid">
@@ -1798,6 +1935,7 @@ Listening - UNIT 2
       groupStats: {},
       dailyStats: {},
       wordPerformance: {},
+      learningEvents: [],
       enrichmentCache: {},
       isEnriching: false,
       flashcardFlipped: false,
@@ -1931,6 +2069,13 @@ Listening - UNIT 2
     const studyHeatmap = document.getElementById("studyHeatmap");
     const masteryDistribution = document.getElementById("masteryDistribution");
     const smartWordList = document.getElementById("smartWordList");
+    const errorGroupSelect = document.getElementById("errorGroupSelect");
+    const errorPeriodSelect = document.getElementById("errorPeriodSelect");
+    const groupErrorInsight = document.getElementById("groupErrorInsight");
+    const groupErrorSummary = document.getElementById("groupErrorSummary");
+    const groupErrorModes = document.getElementById("groupErrorModes");
+    const groupErrorWords = document.getElementById("groupErrorWords");
+    const groupErrorRecommendations = document.getElementById("groupErrorRecommendations");
 
     let accuracyChartInstance = null;
     let sessionChartInstance = null;
@@ -2066,6 +2211,7 @@ Listening - UNIT 2
       appState.groupStats = {};
       appState.dailyStats = {};
       appState.wordPerformance = {};
+      appState.learningEvents = [];
       appState.flashcardFlipped = false;
       appState.gameMoves = 0;
       appState.gameMistakes = 0;
@@ -2812,14 +2958,15 @@ Listening - UNIT 2
 
     function saveAdvancedStats() {
       localStorage.setItem(profileStorageKey(STATS_KEY), JSON.stringify({
-        version: 3,
+        version: 4,
         sessionHistory: appState.sessionHistory,
         hardWords: appState.hardWords,
         lifetimeStats: appState.lifetimeStats,
         modeStats: appState.modeStats,
         groupStats: appState.groupStats,
         dailyStats: appState.dailyStats,
-        wordPerformance: appState.wordPerformance
+        wordPerformance: appState.wordPerformance,
+        learningEvents: appState.learningEvents
       }));
     }
 
@@ -2858,6 +3005,9 @@ Listening - UNIT 2
         Object.keys(appState.wordPerformance).forEach(key => {
           appState.wordPerformance[key] = normalizeWordSchedule(appState.wordPerformance[key]);
         });
+        appState.learningEvents = Array.isArray(data.learningEvents)
+          ? data.learningEvents.filter(event => event && typeof event === "object" && event.dateKey && event.outcome).slice(-2000)
+          : [];
 
         if (!Object.keys(appState.modeStats).length && appState.sessionHistory.length) {
           appState.sessionHistory.forEach(session => {
@@ -2995,6 +3145,7 @@ Listening - UNIT 2
       renderGroupSelect();
       renderMainWrongSummary();
       renderSmartLearningDashboard();
+      renderGroupErrorAnalytics();
     }
 
     function renderGroupSelect() {
@@ -3632,6 +3783,21 @@ Listening - UNIT 2
       store[safeKey] = counter;
     }
 
+    function recordLearningEvent(item, outcome) {
+      if (!item) return;
+      const now = new Date();
+      appState.learningEvents.push({
+        timestamp: now.toISOString(),
+        dateKey: localDateKey(now),
+        group: item.group || "Chưa phân nhóm",
+        mode: appState.currentMode || appState.selectedMode || "Không rõ",
+        word: item.word || "",
+        meaning: item.meaning || "",
+        outcome
+      });
+      appState.learningEvents = appState.learningEvents.slice(-2000);
+    }
+
     function recordAnswerStats(isCorrect, item) {
       const outcome = isCorrect ? "correct" : "wrong";
       const lifetime = appState.lifetimeStats;
@@ -3642,6 +3808,7 @@ Listening - UNIT 2
 
       updatePerformanceCounter(appState.modeStats, appState.currentMode, outcome);
       updatePerformanceCounter(appState.groupStats, item.group || "Chưa phân nhóm", outcome);
+      recordLearningEvent(item, outcome);
 
       const today = localDateKey();
       const daily = { ...normalizeCounter(appState.dailyStats[today]), sessions: Number(appState.dailyStats[today]?.sessions) || 0 };
@@ -3669,6 +3836,7 @@ Listening - UNIT 2
       appState.lifetimeStats.skipped += 1;
       updatePerformanceCounter(appState.modeStats, appState.currentMode, "skipped");
       updatePerformanceCounter(appState.groupStats, item?.group || "Chưa phân nhóm", "skipped");
+      recordLearningEvent(item, "skipped");
 
       const today = localDateKey();
       const daily = { ...normalizeCounter(appState.dailyStats[today]), sessions: Number(appState.dailyStats[today]?.sessions) || 0 };
@@ -4238,8 +4406,161 @@ Listening - UNIT 2
         : `<div class="empty">Chưa có dữ liệu.</div>`;
     }
 
+    function counterFromLearningEvents(events) {
+      return events.reduce((counter, event) => {
+        if (event.outcome === "skipped") {
+          counter.skipped += 1;
+        } else {
+          counter.attempted += 1;
+          if (event.outcome === "correct") counter.correct += 1;
+          if (event.outcome === "wrong") counter.wrong += 1;
+        }
+        return counter;
+      }, emptyCounter());
+    }
+
+    function practiceSuggestionForMode(mode) {
+      return {
+        multiple: "Luyện Trắc nghiệm rồi đọc lại nghĩa đầy đủ sau mỗi câu.",
+        typing: "Chuyển sang Nhập nghĩa và tự gõ, tránh chỉ nhận diện đáp án.",
+        "vi-to-en": "Luyện Việt → Anh để tăng khả năng chủ động nhớ từ.",
+        synonym: "Ôn lại cụm đồng nghĩa và phân biệt sắc thái theo ngữ cảnh.",
+        "word-family": "Gom từ theo noun/verb/adjective/adverb rồi luyện Word family.",
+        collocation: "Học cả cụm và đặt câu với chế độ Collocation.",
+        flashcard: "Dùng flashcard, tự nói đáp án trước khi lật mặt sau.",
+        "word-scramble": "Luyện chính tả bằng Xếp chữ và Việt → Anh.",
+        "word-catch": "Giảm tốc độ, quay lại Trắc nghiệm để củng cố nghĩa.",
+        "true-false": "Đọc kỹ cả từ lẫn nghĩa trước khi chọn Đúng/Sai.",
+        "memory-match": "Ôn theo cặp nhỏ 5–8 từ bằng Lật thẻ trí nhớ."
+      }[mode] || "Ôn lại nhóm này bằng Nhập nghĩa và flashcard.";
+    }
+
+    function renderGroupErrorAnalytics() {
+      const previousGroup = errorGroupSelect.value || "__all__";
+      const groupNames = Array.from(new Set([
+        ...appState.groups,
+        ...Object.keys(appState.groupStats),
+        ...appState.learningEvents.map(event => event.group).filter(Boolean)
+      ])).sort((a, b) => a.localeCompare(b, "vi"));
+      errorGroupSelect.innerHTML = `<option value="__all__">Tất cả nhóm</option>` +
+        groupNames.map(group => `<option value="${escapeAttr(group)}">${escapeHtml(group)}</option>`).join("");
+      errorGroupSelect.value = groupNames.includes(previousGroup) ? previousGroup : "__all__";
+
+      const selectedGroup = errorGroupSelect.value;
+      const period = errorPeriodSelect.value || "30";
+      const cutoffKey = period === "all" ? "" : addDaysKey(localDateKey(), -(Number(period) - 1));
+      const events = appState.learningEvents.filter(event => {
+        const groupMatches = selectedGroup === "__all__" || event.group === selectedGroup;
+        const periodMatches = !cutoffKey || event.dateKey >= cutoffKey;
+        return groupMatches && periodMatches;
+      });
+
+      let summary;
+      if (period === "all") {
+        summary = selectedGroup === "__all__"
+          ? normalizeCounter(appState.lifetimeStats)
+          : normalizeCounter(appState.groupStats[selectedGroup]);
+      } else {
+        summary = counterFromLearningEvents(events);
+      }
+      const accuracy = counterAccuracy(summary);
+      const errorRate = summary.attempted ? Math.round(summary.wrong / summary.attempted * 100) : 0;
+      const totalActions = summary.attempted + summary.skipped;
+      const skipRate = totalActions ? Math.round(summary.skipped / totalActions * 100) : 0;
+      const selectedEntries = selectedGroup === "__all__"
+        ? appState.entries
+        : appState.entries.filter(item => item.group === selectedGroup);
+      const dueCount = getDueReviewPool(selectedEntries).length;
+
+      groupErrorSummary.innerHTML = [
+        ["Accuracy", `${accuracy}%`],
+        ["Lượt sai", summary.wrong],
+        ["Tỷ lệ bỏ qua", `${skipRate}%`],
+        ["Từ đến lịch", dueCount]
+      ].map(([label, value]) => `<div class="error-summary-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join("");
+
+      const modeMap = new Map();
+      events.forEach(event => {
+        const list = modeMap.get(event.mode) || [];
+        list.push(event);
+        modeMap.set(event.mode, list);
+      });
+      const modeRows = Array.from(modeMap, ([mode, modeEvents]) => {
+        const stats = counterFromLearningEvents(modeEvents);
+        const denominator = stats.attempted + stats.skipped;
+        const issueRate = denominator ? Math.round((stats.wrong + stats.skipped) / denominator * 100) : 0;
+        return { mode, stats, issueRate };
+      }).filter(row => row.stats.wrong + row.stats.skipped > 0)
+        .sort((a, b) => b.issueRate - a.issueRate || b.stats.wrong - a.stats.wrong);
+      groupErrorModes.innerHTML = modeRows.length
+        ? modeRows.slice(0, 7).map(row => `<div class="error-bar-row"><span title="${escapeAttr(modeLabel(row.mode))}">${escapeHtml(modeLabel(row.mode))}</span><div class="error-bar-track"><div class="error-bar-fill" style="width:${row.issueRate}%"></div></div><b>${row.issueRate}%</b></div>`).join("")
+        : `<div class="empty">Chưa ghi nhận dạng bài gây sai trong khoảng này.</div>`;
+
+      const wordMap = new Map();
+      events.forEach(event => {
+        const key = `${event.word}||${event.meaning}`;
+        const row = wordMap.get(key) || { word: event.word, meaning: event.meaning, correct: 0, wrong: 0, skipped: 0, group: event.group };
+        row[event.outcome] = (row[event.outcome] || 0) + 1;
+        wordMap.set(key, row);
+      });
+      if (!wordMap.size) {
+        Object.values(appState.wordPerformance).forEach(stats => {
+          if (selectedGroup !== "__all__" && stats.group !== selectedGroup) return;
+          const lastDate = stats.lastSeen ? new Date(stats.lastSeen) : null;
+          const lastDateKey = lastDate && !Number.isNaN(lastDate.getTime()) ? localDateKey(lastDate) : "";
+          if (cutoffKey && (!lastDateKey || lastDateKey < cutoffKey)) return;
+          wordMap.set(`${stats.word}||${stats.meaning}`, {
+            word: stats.word,
+            meaning: stats.meaning,
+            group: stats.group,
+            correct: Number(stats.correct) || 0,
+            wrong: Number(stats.wrong) || 0,
+            skipped: Number(stats.skipped) || 0
+          });
+        });
+      }
+      const wordRows = Array.from(wordMap.values())
+        .map(row => ({ ...row, issueScore: row.wrong * 2 + row.skipped, attempts: row.correct + row.wrong }))
+        .filter(row => row.issueScore > 0)
+        .sort((a, b) => b.issueScore - a.issueScore || b.wrong - a.wrong)
+        .slice(0, 8);
+      groupErrorWords.innerHTML = wordRows.length
+        ? wordRows.map(row => {
+          const rowErrorRate = row.attempts ? Math.round(row.wrong / row.attempts * 100) : 0;
+          return `<div class="performance-item"><div class="name"><b>${escapeHtml(row.word)}</b><br><span class="muted">${escapeHtml(row.meaning)}</span></div><div class="value"><b>${row.wrong} sai · ${rowErrorRate}%</b><br>${row.skipped} bỏ qua</div></div>`;
+        }).join("")
+        : `<div class="empty">Chưa có từ sai trong khoảng này.</div>`;
+
+      const eligibleGroups = Object.entries(appState.groupStats)
+        .map(([name, stats]) => ({ name, stats: normalizeCounter(stats), accuracy: counterAccuracy(stats) }))
+        .filter(row => row.stats.attempted > 0)
+        .sort((a, b) => a.accuracy - b.accuracy || b.stats.wrong - a.stats.wrong);
+      const weakestGroup = eligibleGroups[0];
+      const recommendations = [];
+      if (modeRows[0]) recommendations.push(practiceSuggestionForMode(modeRows[0].mode));
+      if (wordRows[0]) recommendations.push(`Ưu tiên ôn “${wordRows[0].word}” và ${Math.max(0, wordRows.length - 1)} từ khó còn lại bằng Ôn thông minh.`);
+      if (skipRate >= 20) recommendations.push("Tỷ lệ bỏ qua cao: giảm số câu mỗi phiên và dùng flashcard trước khi làm bài chủ động.");
+      if (dueCount) recommendations.push(`Hoàn thành ${dueCount} từ đang đến lịch trước khi học thêm từ mới.`);
+      if (!recommendations.length && summary.attempted) recommendations.push("Kết quả đang ổn định; tiếp tục ôn theo lịch để duy trì khả năng nhớ lâu.");
+      groupErrorRecommendations.innerHTML = recommendations.length
+        ? recommendations.slice(0, 4).map(text => `<div class="recommendation-item">${escapeHtml(text)}</div>`).join("")
+        : `<div class="empty">Chưa đủ dữ liệu để đưa ra đề xuất.</div>`;
+
+      const groupLabel = selectedGroup === "__all__" ? "toàn bộ các nhóm" : `nhóm <b>${escapeHtml(selectedGroup)}</b>`;
+      const periodLabel = period === "all" ? "toàn bộ thời gian" : `${period} ngày gần nhất`;
+      if (!totalActions) {
+        groupErrorInsight.innerHTML = `Chưa có lượt học cho ${groupLabel} trong ${periodLabel}. Chi tiết theo dạng bài bắt đầu được ghi từ phiên bản này.`;
+      } else {
+        const weakestText = selectedGroup === "__all__" && weakestGroup
+          ? ` Nhóm cần ưu tiên nhất là <b>${escapeHtml(weakestGroup.name)}</b> (${weakestGroup.accuracy}% accuracy).`
+          : "";
+        groupErrorInsight.innerHTML = `${groupLabel} đạt <b>${accuracy}% accuracy</b>, có <b>${summary.wrong} lượt sai</b> và <b>${summary.skipped} lượt bỏ qua</b> trong ${periodLabel}.${weakestText}`;
+      }
+    }
+
     function renderAdvancedDashboard() {
       renderSmartLearningDashboard();
+      renderGroupErrorAnalytics();
       const lifetime = appState.lifetimeStats;
       const lifetimeAcc = lifetime.attempted ? Math.round((lifetime.correct / lifetime.attempted) * 100) : 0;
       lifetimeAttempted.textContent = lifetime.attempted;
@@ -4249,10 +4570,17 @@ Listening - UNIT 2
       studyDayStreak.textContent = getStudyDayStreak();
 
       const groups = Object.entries(appState.groupStats)
-        .map(([name, stats]) => ({ name, stats: normalizeCounter(stats), accuracy: counterAccuracy(stats) }))
-        .sort((a, b) => b.stats.attempted - a.stats.attempted || a.accuracy - b.accuracy);
+        .map(([name, stats]) => {
+          const normalized = normalizeCounter(stats);
+          const accuracy = counterAccuracy(normalized);
+          const actions = normalized.attempted + normalized.skipped;
+          const groupSkipRate = actions ? Math.round(normalized.skipped / actions * 100) : 0;
+          const risk = Math.round((100 - accuracy) * 0.75 + groupSkipRate * 0.25);
+          return { name, stats: normalized, accuracy, skipRate: groupSkipRate, risk };
+        })
+        .sort((a, b) => b.risk - a.risk || b.stats.wrong - a.stats.wrong || b.stats.attempted - a.stats.attempted);
       groupPerformance.innerHTML = groups.length
-        ? groups.map(item => `<div class="performance-item"><div class="name" title="${escapeAttr(item.name)}">${escapeHtml(item.name)}</div><div class="value"><b>${item.accuracy}%</b><br>${item.stats.correct}/${item.stats.attempted} đúng · ${item.stats.skipped} bỏ qua</div></div>`).join("")
+        ? groups.map(item => `<div class="performance-item"><div class="name" title="${escapeAttr(item.name)}">${escapeHtml(item.name)}<br><span class="muted">Rủi ro học lại ${item.risk}/100</span></div><div class="value"><b>${item.accuracy}%</b><br>${item.stats.wrong} sai · ${item.skipRate}% bỏ qua</div></div>`).join("")
         : `<div class="empty">Chưa có dữ liệu.</div>`;
 
       const recent = appState.sessionHistory.slice(-6).reverse();
@@ -4822,6 +5150,8 @@ mentor (v) – hướng dẫn, cố vấn`;
     });
     modeSelect.addEventListener("change", updateStartButtonLabel);
     groupSelect.addEventListener("change", updateStartButtonLabel);
+    errorGroupSelect.addEventListener("change", renderGroupErrorAnalytics);
+    errorPeriodSelect.addEventListener("change", renderGroupErrorAnalytics);
     startSmartReviewBtn.addEventListener("click", () => {
       groupSelect.value = "__all__";
       modeSelect.value = "spaced-review";

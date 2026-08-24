@@ -82,6 +82,15 @@ Dữ liệu thống kê cũ được tự động chuyển sang schema mới. T�
 - Heatmap 35 ngày cho biết nhịp học; bảng phân bố chia từ thành Mới, Đang học, Đang nhớ và Thành thạo.
 - Danh sách **Từ cần ưu tiên** xếp từ quá hạn/yếu lên trước, đồng thời hiển thị lịch tiếp theo, mức thành thạo và tỷ lệ ghi nhớ dự báo.
 
+## Phân tích lỗi sai theo nhóm
+
+- Có thể lọc từng nhóm từ theo 7 ngày, 30 ngày hoặc toàn bộ thời gian.
+- Bảng tổng hợp hiển thị accuracy, số lượt sai, tỷ lệ bỏ qua và số từ đang đến lịch ôn của nhóm.
+- Mỗi lượt đúng, sai hoặc bỏ qua được ghi thành một sự kiện học cục bộ gồm nhóm, chế độ, từ và thời điểm; tối đa 2.000 sự kiện gần nhất được giữ cho từng tài khoản.
+- Hệ thống xếp hạng các dạng bài gây sai, các từ khó nhất và tính điểm rủi ro học lại cho từng nhóm.
+- Đề xuất luyện tập thay đổi theo lỗi nổi bật: Nhập nghĩa, Việt → Anh, collocation, word family, chính tả hoặc flashcard.
+- Dữ liệu thống kê cũ vẫn dùng được cho tổng quan toàn thời gian và danh sách từ khó; phân tích chi tiết theo dạng bài được tích lũy từ phiên bản này trở đi.
+
 ## Các lỗi đã sửa
 
 - `reading` và `listening` có nghĩa không còn bị nhận nhầm thành tiêu đề nhóm.
