@@ -291,6 +291,97 @@
       margin-bottom:4px;
     }
 
+    .lexical-block{
+      display:grid;
+      gap:7px;
+      margin-top:10px;
+    }
+
+    .lexical-row{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      flex-wrap:wrap;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .lexical-label{
+      min-width:88px;
+      color:var(--text);
+      font-weight:800;
+    }
+
+    .lexical-chip{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:4px 8px;
+      border:1px solid #d9e6ff;
+      border-radius:999px;
+      background:#f4f8ff;
+      color:#355da8;
+      font-weight:700;
+    }
+
+    body.dark .lexical-chip{
+      background:#16233a;
+      border-color:#2d456b;
+      color:#a9c7ff;
+    }
+
+    .lexical-editor{
+      margin-top:10px;
+      border-top:1px dashed var(--line);
+      padding-top:9px;
+    }
+
+    .lexical-editor summary{
+      cursor:pointer;
+      color:var(--primary);
+      font-size:13px;
+      font-weight:800;
+    }
+
+    .lexical-editor-grid{
+      display:grid;
+      gap:8px;
+      margin-top:9px;
+    }
+
+    .lexical-editor-grid input{
+      padding:9px 10px;
+      border-radius:10px;
+      font-size:13px;
+    }
+
+    .enrichment-status{
+      min-height:22px;
+      margin-top:9px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .lexical-study-panel{
+      display:none;
+      gap:8px;
+      margin-top:14px;
+      padding:13px;
+      border:1px solid var(--line);
+      border-radius:14px;
+      background:#f8fbff;
+    }
+
+    body.dark .lexical-study-panel{
+      background:#0f172a;
+    }
+
+    .lexical-study-panel.show{
+      display:grid;
+    }
+
     .empty{
       color:var(--muted);
       font-size:14px;
@@ -541,7 +632,7 @@
 
     .mini-stats{
       display:grid;
-      grid-template-columns:repeat(2,1fr);
+      grid-template-columns:repeat(3,1fr);
       gap:10px;
     }
 
@@ -561,6 +652,89 @@
     .mini-stat .v{
       font-size:28px;
       font-weight:800;
+    }
+
+    .advanced-dashboard{
+      margin-top:20px;
+    }
+
+    .advanced-summary{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:10px;
+      margin-bottom:16px;
+    }
+
+    .dashboard-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+      margin-top:14px;
+    }
+
+    .dashboard-panel{
+      min-width:0;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      background:#fbfdff;
+    }
+
+    body.dark .dashboard-panel{
+      background:#0f172a;
+    }
+
+    .dashboard-panel h4{
+      margin:0 0 10px;
+      font-size:15px;
+    }
+
+    .performance-list{
+      display:grid;
+      gap:9px;
+      max-height:280px;
+      overflow:auto;
+    }
+
+    .performance-item{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:8px;
+      align-items:center;
+      padding:9px 10px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:var(--panel);
+      font-size:13px;
+    }
+
+    .performance-item .name{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      font-weight:800;
+    }
+
+    .performance-item .value{
+      color:var(--muted);
+      text-align:right;
+    }
+
+    .insight-banner{
+      margin-top:14px;
+      padding:12px 14px;
+      border:1px solid #bfdbfe;
+      border-radius:14px;
+      background:#eff6ff;
+      color:#1e3a8a;
+      font-size:14px;
+      line-height:1.6;
+    }
+
+    body.dark .insight-banner{
+      background:#172554;
+      border-color:#1e40af;
+      color:#bfdbfe;
     }
 
     .wrong-list{
@@ -654,6 +828,9 @@
       .layout,.study-grid{
         grid-template-columns:1fr;
       }
+      .advanced-summary{
+        grid-template-columns:repeat(3,1fr);
+      }
     }
 
     @media (max-width:720px){
@@ -665,6 +842,10 @@
       }
       .mini-stats{
         grid-template-columns:repeat(2,1fr);
+      }
+      .advanced-summary,
+      .dashboard-grid{
+        grid-template-columns:1fr;
       }
     }
   </style>
@@ -695,11 +876,18 @@ Listening - UNIT 2
             <button id="clearBtn" class="btn-secondary">Xóa ô nhập</button>
           </div>
 
+          <div class="row">
+            <button id="enrichBtn" class="btn-warning" type="button">✨ Gợi ý đồng nghĩa &amp; word family</button>
+          </div>
+          <div id="enrichmentStatus" class="enrichment-status" aria-live="polite"></div>
+          <div class="note" style="margin-top:0;">Gợi ý tự động dùng <a href="https://www.datamuse.com/api/" target="_blank" rel="noreferrer">Datamuse API</a>; nên kiểm tra và sửa lại theo ngữ cảnh bài học.</div>
+
           <div class="note">
             Web parse tốt các kiểu như:
             <br>- <b>1. tenant (n) – người thuê</b>
             <br>- <b>vendor (n) - người bán</b>
-            <br>- <b>questionnaire / survey (n) – bảng câu hỏi / khảo sát</b>
+             <br>- <b>questionnaire / survey (n) – bảng câu hỏi / khảo sát</b>
+            <br>- Có thể thêm: <b>| syn: renter, occupant | family: tenant, tenancy</b>
             <br>- Các tiêu đề như <b>Listening - UNIT 2</b> sẽ thành nhóm học.
           </div>
 
@@ -759,6 +947,8 @@ Listening - UNIT 2
                   <option value="mixed">Trộn</option>
                   <option value="flashcard">Flashcard</option>
                   <option value="vi-to-en">Việt → Anh</option>
+                  <option value="synonym">Từ đồng nghĩa</option>
+                  <option value="word-family">Word family</option>
                   <option value="speed">Speed mode</option>
                   <option value="wrong-only">Học lại từ sai</option>
                 </select>
@@ -798,6 +988,38 @@ Listening - UNIT 2
           </div>
         </div>
       </div>
+
+      <div class="card advanced-dashboard">
+        <h3>Thống kê nâng cao</h3>
+        <div class="advanced-summary">
+          <div class="mini-stat"><div class="k">Tổng câu</div><div class="v" id="lifetimeAttempted">0</div></div>
+          <div class="mini-stat"><div class="k">Accuracy</div><div class="v" id="lifetimeAccuracy">0%</div></div>
+          <div class="mini-stat"><div class="k">Phiên học</div><div class="v" id="lifetimeSessions">0</div></div>
+          <div class="mini-stat"><div class="k">Streak tốt nhất</div><div class="v" id="lifetimeBestStreak">0</div></div>
+          <div class="mini-stat"><div class="k">Chuỗi ngày học</div><div class="v" id="studyDayStreak">0</div></div>
+        </div>
+        <div id="advancedInsight" class="insight-banner">Hoàn thành vài câu để hệ thống tạo nhận xét học tập.</div>
+        <div class="dashboard-grid">
+          <div class="dashboard-panel">
+            <h4>Hoạt động 7 ngày gần nhất</h4>
+            <canvas id="activityChart" height="150"></canvas>
+          </div>
+          <div class="dashboard-panel">
+            <h4>Accuracy theo chế độ</h4>
+            <canvas id="modeChart" height="150"></canvas>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-panel">
+            <h4>Hiệu suất theo nhóm</h4>
+            <div id="groupPerformance" class="performance-list"><div class="empty">Chưa có dữ liệu.</div></div>
+          </div>
+          <div class="dashboard-panel">
+            <h4>Các phiên gần đây</h4>
+            <div id="recentSessions" class="performance-list"><div class="empty">Chưa có phiên hoàn thành.</div></div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section id="studyScreen" class="screen study-screen">
@@ -809,6 +1031,7 @@ Listening - UNIT 2
         <div class="study-actions">
           <button id="toggleDarkStudyBtn" class="btn-secondary">🌙 Dark mode</button>
           <button id="backToMainBtn" class="btn-secondary">← Quay lại nhập dữ liệu</button>
+          <button id="endStudyBtn" class="btn-warning">Kết thúc phiên</button>
           <button id="restartStudyBtn" class="btn-primary">Làm mới phiên học</button>
         </div>
       </div>
@@ -884,6 +1107,7 @@ Listening - UNIT 2
             </div>
 
             <div id="feedbackBox" class="feedback"></div>
+            <div id="lexicalStudyPanel" class="lexical-study-panel"></div>
 
             <div class="quiz-actions">
               <button id="nextBtn" class="btn-secondary">Câu tiếp theo</button>
@@ -920,6 +1144,10 @@ Listening - UNIT 2
               <div class="mini-stat">
                 <div class="k">Sai</div>
                 <div class="v" id="wrongCount">0</div>
+              </div>
+              <div class="mini-stat">
+                <div class="k">Bỏ qua</div>
+                <div class="v" id="skippedCount">0</div>
               </div>
             </div>
           </div>
@@ -972,6 +1200,9 @@ Listening - UNIT 2
     const WRONG_KEY = "vocab_paste_learn_pro_wrong";
     const STATS_KEY = "vocab_paste_learn_pro_stats";
     const THEME_KEY = "vocab_paste_learn_pro_theme";
+    const ENRICHMENT_CACHE_KEY = "vocab_paste_learn_pro_lexical_cache_v4";
+    const ENRICHMENT_CACHE_TTL = 30 * 24 * 60 * 60 * 1000;
+    const DATAMUSE_API = "https://api.datamuse.com/words";
 
     const appState = {
       entries: [],
@@ -990,12 +1221,23 @@ Listening - UNIT 2
       attempted: 0,
       correct: 0,
       streak: 0,
+      bestSessionStreak: 0,
+      skipped: 0,
       wrongSession: [],
       answered: false,
       finished: false,
+      sessionStartedAt: 0,
+      sessionRecorded: false,
 
       sessionHistory: [],
       hardWords: {},
+      lifetimeStats: { attempted: 0, correct: 0, wrong: 0, skipped: 0, sessions: 0, bestStreak: 0 },
+      modeStats: {},
+      groupStats: {},
+      dailyStats: {},
+      wordPerformance: {},
+      enrichmentCache: {},
+      isEnriching: false,
       flashcardFlipped: false,
       timerId: null,
       timerTotal: 10,
@@ -1006,6 +1248,8 @@ Listening - UNIT 2
     const parseBtn = document.getElementById("parseBtn");
     const loadSampleBtn = document.getElementById("loadSampleBtn");
     const clearBtn = document.getElementById("clearBtn");
+    const enrichBtn = document.getElementById("enrichBtn");
+    const enrichmentStatus = document.getElementById("enrichmentStatus");
 
     const totalWords = document.getElementById("totalWords");
     const totalGroups = document.getElementById("totalGroups");
@@ -1025,6 +1269,7 @@ Listening - UNIT 2
     const studyScreen = document.getElementById("studyScreen");
     const backToMainBtn = document.getElementById("backToMainBtn");
     const restartStudyBtn = document.getElementById("restartStudyBtn");
+    const endStudyBtn = document.getElementById("endStudyBtn");
     const studySubtext = document.getElementById("studySubtext");
 
     const toggleDarkBtn = document.getElementById("toggleDarkBtn");
@@ -1043,6 +1288,7 @@ Listening - UNIT 2
     const submitTypingBtn = document.getElementById("submitTypingBtn");
     const showAnswerBtn = document.getElementById("showAnswerBtn");
     const feedbackBox = document.getElementById("feedbackBox");
+    const lexicalStudyPanel = document.getElementById("lexicalStudyPanel");
     const nextBtn = document.getElementById("nextBtn");
     const skipBtn = document.getElementById("skipBtn");
 
@@ -1065,6 +1311,7 @@ Listening - UNIT 2
     const attemptedCount = document.getElementById("attemptedCount");
     const streakCount = document.getElementById("streakCount");
     const wrongCount = document.getElementById("wrongCount");
+    const skippedCount = document.getElementById("skippedCount");
     const wrongList = document.getElementById("wrongList");
     const hardWordList = document.getElementById("hardWordList");
 
@@ -1076,8 +1323,19 @@ Listening - UNIT 2
     const studyWrongBtn = document.getElementById("studyWrongBtn");
     const clearWrongBtn = document.getElementById("clearWrongBtn");
 
+    const lifetimeAttempted = document.getElementById("lifetimeAttempted");
+    const lifetimeAccuracy = document.getElementById("lifetimeAccuracy");
+    const lifetimeSessions = document.getElementById("lifetimeSessions");
+    const lifetimeBestStreak = document.getElementById("lifetimeBestStreak");
+    const studyDayStreak = document.getElementById("studyDayStreak");
+    const advancedInsight = document.getElementById("advancedInsight");
+    const groupPerformance = document.getElementById("groupPerformance");
+    const recentSessions = document.getElementById("recentSessions");
+
     let accuracyChartInstance = null;
     let sessionChartInstance = null;
+    let activityChartInstance = null;
+    let modeChartInstance = null;
 
     function escapeHtml(str) {
       return String(str)
@@ -1087,7 +1345,7 @@ Listening - UNIT 2
     }
 
     function escapeAttr(str) {
-      return String(str).replace(/"/g, "&quot;");
+      return escapeHtml(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
     }
 
     function normalizeMeaning(text) {
@@ -1122,11 +1380,91 @@ Listening - UNIT 2
         .trim();
     }
 
+    function uniqueStrings(values) {
+      const seen = new Set();
+      return (Array.isArray(values) ? values : [])
+        .map(value => String(value || "").trim())
+        .filter(value => {
+          const key = normalizeWord(value);
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    }
+
+    function normalizePartOfSpeech(value) {
+      const key = String(value || "").toLowerCase().replace(/[().]/g, "").trim();
+      const labels = {
+        n: "noun", noun: "noun", danh_tu: "noun",
+        v: "verb", verb: "verb", dong_tu: "verb",
+        adj: "adjective", adjective: "adjective", tinh_tu: "adjective",
+        adv: "adverb", adverb: "adverb", trang_tu: "adverb"
+      };
+      return labels[key.replace(/\s+/g, "_")] || key;
+    }
+
+    function parseFamilyInput(text) {
+      const seen = new Set();
+      return String(text || "")
+        .split(/[;,]/)
+        .map(part => part.trim())
+        .filter(Boolean)
+        .map(part => {
+          const match = part.match(/^(noun|verb|adjective|adverb|n|v|adj|adv)\s*:\s*(.+)$/i);
+          const word = (match ? match[2] : part).trim();
+          const pos = match ? normalizePartOfSpeech(match[1]) : "";
+          return { word, pos };
+        })
+        .filter(item => {
+          const key = normalizeWord(item.word);
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    }
+
+    function normalizeFamily(values) {
+      if (typeof values === "string") return parseFamilyInput(values);
+      const seen = new Set();
+      return (Array.isArray(values) ? values : [])
+        .map(value => typeof value === "string"
+          ? { word: value.trim(), pos: "" }
+          : { word: String(value?.word || "").trim(), pos: normalizePartOfSpeech(value?.pos || "") })
+        .filter(item => {
+          const key = normalizeWord(item.word);
+          if (!key || seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    }
+
+    function familyToInput(values) {
+      return normalizeFamily(values)
+        .map(item => `${item.pos ? item.pos + ": " : ""}${item.word}`)
+        .join("; ");
+    }
+
+    function hydrateEntry(entry) {
+      return {
+        ...entry,
+        synonyms: uniqueStrings(entry?.synonyms),
+        wordFamily: normalizeFamily(entry?.wordFamily),
+        partOfSpeech: normalizePartOfSpeech(entry?.partOfSpeech || ""),
+        lexicalSource: entry?.lexicalSource || ""
+      };
+    }
+
     function isHeadingLine(line) {
       const clean = line.trim();
       if (!clean) return false;
-      if (/^(vocabulary|vocab|listening|reading)\b/i.test(clean)) return true;
-      if (/unit\s*\d+/i.test(clean) && !/[–—-].+\(/i.test(clean)) return true;
+      const hasEntrySeparator = /\s[–—-]\s/.test(clean);
+      const hasTrailingPartOfSpeech = /\([^)]*\)\s*[–—-]\s/.test(clean);
+      if (/^(vocabulary|vocab|listening|reading)\b/i.test(clean)) {
+        if (hasTrailingPartOfSpeech) return false;
+        if (/unit\s*\d+/i.test(clean)) return true;
+        return !hasEntrySeparator;
+      }
+      if (/unit\s*\d+/i.test(clean) && !hasTrailingPartOfSpeech) return true;
       return false;
     }
 
@@ -1134,8 +1472,8 @@ Listening - UNIT 2
       const lines = raw
         .replace(/\r/g, "")
         .split("\n")
-        .map(line => line.trim())
-        .filter(line => line.length > 0);
+        .map((line, index) => ({ text: line.trim(), lineNo: index + 1 }))
+        .filter(item => item.text.length > 0);
 
       let currentGroup = "Chưa phân nhóm";
       const entries = [];
@@ -1143,8 +1481,8 @@ Listening - UNIT 2
       const groupsSet = new Set();
 
       for (let i = 0; i < lines.length; i++) {
-        const originalLine = lines[i];
-        const lineNo = i + 1;
+        const originalLine = lines[i].text;
+        const lineNo = lines[i].lineNo;
 
         if (isHeadingLine(originalLine)) {
           currentGroup = originalLine.replace(/\s+/g, " ").trim();
@@ -1160,20 +1498,35 @@ Listening - UNIT 2
 
         line = line.replace(/^\d+\.\s*/, "");
 
-        const lastDashIndex = line.lastIndexOf("-");
-        if (lastDashIndex === -1) {
+        const spacedDash = line.match(/\s+-\s+/);
+        const separatorIndex = spacedDash ? spacedDash.index : line.lastIndexOf("-");
+        const separatorLength = spacedDash ? spacedDash[0].length : 1;
+        if (separatorIndex === -1) {
           errors.push({ lineNo, text: originalLine, reason: "Không thấy dấu phân cách giữa từ và nghĩa" });
           continue;
         }
 
-        let left = line.slice(0, lastDashIndex).trim();
-        let right = line.slice(lastDashIndex + 1).trim();
+        let left = line.slice(0, separatorIndex).trim();
+        const rightWithMetadata = line.slice(separatorIndex + separatorLength).trim();
+        const metadataParts = rightWithMetadata.split("|").map(part => part.trim()).filter(Boolean);
+        let right = metadataParts.shift() || "";
+        let synonyms = [];
+        let wordFamily = [];
+
+        metadataParts.forEach(part => {
+          const synonymMatch = part.match(/^(?:syn|synonym|synonyms|đồng nghĩa)\s*:\s*(.+)$/i);
+          const familyMatch = part.match(/^(?:family|word[ -]?family|họ từ)\s*:\s*(.+)$/i);
+          if (synonymMatch) synonyms = uniqueStrings(synonymMatch[1].split(/[,;]/));
+          if (familyMatch) wordFamily = parseFamilyInput(familyMatch[1]);
+        });
 
         if (!left || !right) {
           errors.push({ lineNo, text: originalLine, reason: "Thiếu từ hoặc thiếu nghĩa" });
           continue;
         }
 
+        const posMatch = left.match(/\(([^)]*)\)\s*$/);
+        const partOfSpeech = normalizePartOfSpeech(posMatch?.[1] || "");
         left = left.replace(/\([^)]*\)\s*$/g, "").trim();
         left = cleanupWord(left);
 
@@ -1189,7 +1542,11 @@ Listening - UNIT 2
           word: left,
           meaning: right,
           group: currentGroup,
-          raw: originalLine
+          raw: originalLine,
+          partOfSpeech,
+          synonyms,
+          wordFamily,
+          lexicalSource: synonyms.length || wordFamily.length ? "manual" : ""
         });
       }
 
@@ -1220,9 +1577,211 @@ Listening - UNIT 2
       if (!raw) return;
       try {
         const data = JSON.parse(raw);
-        appState.entries = Array.isArray(data.entries) ? data.entries : [];
+        appState.entries = Array.isArray(data.entries) ? data.entries.map(hydrateEntry) : [];
         appState.groups = Array.isArray(data.groups) ? data.groups : [];
       } catch (e) {}
+    }
+
+    function loadEnrichmentCache() {
+      const raw = localStorage.getItem(ENRICHMENT_CACHE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        appState.enrichmentCache = data && typeof data === "object" ? data : {};
+      } catch (e) {
+        appState.enrichmentCache = {};
+      }
+    }
+
+    function saveEnrichmentCache() {
+      localStorage.setItem(ENRICHMENT_CACHE_KEY, JSON.stringify(appState.enrichmentCache));
+    }
+
+    function getLookupWord(word) {
+      return String(word || "")
+        .split("/")[0]
+        .replace(/[^a-zA-Z' -]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toLowerCase();
+    }
+
+    function getFamilyStem(word) {
+      const clean = getLookupWord(word);
+      if (!clean || clean.includes(" ")) return "";
+
+      const unprefixed = clean.replace(/^(?:dis|un|re|non|mis|over|under)(?=.{4,}$)/, "");
+      const source = unprefixed.length >= 4 ? unprefixed : clean;
+
+      const rules = [
+        [/iness$/, match => match.slice(0, -5)],
+        [/ation$/, match => match.slice(0, -3)],
+        [/ition$/, match => match.slice(0, -3)],
+        [/tion$/, match => match.slice(0, -3)],
+        [/sion$/, match => match.slice(0, -3)],
+        [/ness$/, match => match.slice(0, -4)],
+        [/ment$/, match => match.slice(0, -4)],
+        [/ically$/, match => match.slice(0, -4)],
+        [/ity$/, match => match.slice(0, -3)],
+        [/ive$/, match => match.slice(0, -3)],
+        [/ous$/, match => match.slice(0, -3)],
+        [/ful$/, match => match.slice(0, -3)],
+        [/less$/, match => match.slice(0, -4)],
+        [/able$/, match => match.slice(0, -4)],
+        [/ible$/, match => match.slice(0, -4)],
+        [/ally$/, match => match.slice(0, -2)],
+        [/ly$/, match => match.slice(0, -2)],
+        [/ing$/, match => match.slice(0, -3).replace(/(.)\1$/, "$1")],
+        [/ed$/, match => match.slice(0, -2).replace(/(.)\1$/, "$1")],
+        [/ship$/, match => match.slice(0, -4)]
+      ];
+
+      for (const [pattern, transform] of rules) {
+        if (!pattern.test(source)) continue;
+        let candidate = transform(source);
+        if (candidate.endsWith("i") && candidate.length > 4) candidate = candidate.slice(0, -1);
+        if (candidate.length >= 3) return candidate;
+      }
+      return source;
+    }
+
+    function datamusePos(tags) {
+      const values = Array.isArray(tags) ? tags : [];
+      const labels = { n: "noun", v: "verb", adj: "adjective", adv: "adverb" };
+      const firstPos = values.find(value => labels[value]);
+      return labels[firstPos] || "";
+    }
+
+    function datamuseFrequency(tags) {
+      const tag = (Array.isArray(tags) ? tags : []).find(value => String(value).startsWith("f:"));
+      return tag ? Number(String(tag).slice(2)) || 0 : 0;
+    }
+
+    function isPlausibleFamilyCandidate(word, stem) {
+      const candidate = normalizeWord(word).replace(/[^a-z]/g, "");
+      const root = normalizeWord(stem).replace(/[^a-z]/g, "");
+      if (!candidate || !root) return false;
+      const withoutPrefix = candidate.replace(/^(?:dis|un|re|non|mis|over|under|en)(?=.{4,}$)/, "");
+      if (!withoutPrefix.startsWith(root)) return false;
+      const suffix = withoutPrefix.slice(root.length);
+      return /^(?:|e|y|s|es|ed|ing|ingly|er|or|ess|ion|ions|tion|tions|ation|ations|ment|ments|ness|ity|ities|ive|ives|ively|ivity|al|ally|ary|ory|ful|fully|less|able|ably|ible|ibly|ant|ent|ence|ance|ist|ism|ship|hood|dom|ize|ized|izing|ise|ised|ising|ivate|ivated|ivating|ivation)$/.test(suffix);
+    }
+
+    async function fetchDatamuse(params) {
+      const url = new URL(DATAMUSE_API);
+      Object.entries(params).forEach(([key, value]) => url.searchParams.set(key, value));
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 9000);
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) throw new Error(`Datamuse ${response.status}`);
+        const data = await response.json();
+        return Array.isArray(data) ? data : [];
+      } finally {
+        clearTimeout(timeoutId);
+      }
+    }
+
+    async function fetchLexicalSuggestions(word, partOfSpeech = "") {
+      const lookupWord = getLookupWord(word);
+      if (!lookupWord) return { synonyms: [], wordFamily: [] };
+
+      const normalizedPos = normalizePartOfSpeech(partOfSpeech);
+      const cacheKey = `${normalizeWord(lookupWord)}::${normalizedPos}`;
+      const cached = appState.enrichmentCache[cacheKey];
+      if (cached && Date.now() - cached.savedAt < ENRICHMENT_CACHE_TTL) {
+        return {
+          synonyms: uniqueStrings(cached.synonyms),
+          wordFamily: normalizeFamily(cached.wordFamily)
+        };
+      }
+
+      const stem = getFamilyStem(lookupWord);
+      const synonymRequest = fetchDatamuse({ rel_syn: lookupWord, md: "pf", max: "10" });
+      const familyRequest = stem
+        ? fetchDatamuse({ sp: `*${stem}*`, md: "pf", max: "100" })
+        : Promise.resolve([]);
+      const [synonymResults, familyResults] = await Promise.all([synonymRequest, familyRequest]);
+
+      const posCode = { noun: "n", verb: "v", adjective: "adj", adverb: "adv" }[normalizedPos];
+      const samePosSynonyms = posCode
+        ? synonymResults.filter(item => Array.isArray(item.tags) && item.tags.includes(posCode))
+        : synonymResults;
+      const selectedSynonyms = samePosSynonyms.length ? samePosSynonyms : synonymResults;
+      const synonyms = uniqueStrings(selectedSynonyms.map(item => item.word))
+        .filter(item => normalizeWord(item) !== normalizeWord(lookupWord))
+        .slice(0, 8);
+      const wordFamily = normalizeFamily(familyResults
+        .filter(item => {
+          const candidate = String(item.word || "");
+          return candidate && !candidate.includes(" ") &&
+            normalizeWord(candidate) !== normalizeWord(lookupWord) &&
+            isPlausibleFamilyCandidate(candidate, stem);
+        })
+        .sort((a, b) => datamuseFrequency(b.tags) - datamuseFrequency(a.tags))
+        .map(item => ({ word: item.word, pos: datamusePos(item.tags) })))
+        .slice(0, 8);
+
+      const result = { synonyms, wordFamily, savedAt: Date.now() };
+      appState.enrichmentCache[cacheKey] = result;
+      saveEnrichmentCache();
+      return result;
+    }
+
+    async function enrichVocabulary() {
+      if (appState.isEnriching) return;
+      if (!appState.entries.length) {
+        enrichmentStatus.textContent = "Hãy phân tích danh sách từ trước khi lấy gợi ý.";
+        return;
+      }
+
+      const pending = appState.entries
+        .map((entry, index) => ({ entry, index }))
+        .filter(({ entry }) => !entry.synonyms?.length || !entry.wordFamily?.length)
+        .slice(0, 100);
+
+      if (!pending.length) {
+        enrichmentStatus.textContent = "Tất cả từ đã có dữ liệu đồng nghĩa và word family.";
+        return;
+      }
+
+      appState.isEnriching = true;
+      enrichBtn.disabled = true;
+      let completed = 0;
+      let updated = 0;
+      let failed = 0;
+
+      for (let offset = 0; offset < pending.length; offset += 4) {
+        const batch = pending.slice(offset, offset + 4);
+        await Promise.all(batch.map(async ({ entry, index }) => {
+          try {
+            const suggestions = await fetchLexicalSuggestions(entry.word, entry.partOfSpeech);
+            const current = hydrateEntry(appState.entries[index]);
+            const nextSynonyms = current.synonyms.length ? current.synonyms : suggestions.synonyms;
+            const nextFamily = current.wordFamily.length ? current.wordFamily : suggestions.wordFamily;
+            if (nextSynonyms.length !== current.synonyms.length || nextFamily.length !== current.wordFamily.length) updated += 1;
+            appState.entries[index] = {
+              ...current,
+              synonyms: nextSynonyms,
+              wordFamily: nextFamily,
+              lexicalSource: current.lexicalSource || "datamuse"
+            };
+          } catch (error) {
+            failed += 1;
+          } finally {
+            completed += 1;
+            enrichmentStatus.textContent = `Đang lấy gợi ý: ${completed}/${pending.length} từ…`;
+          }
+        }));
+      }
+
+      saveEntries();
+      renderPreview();
+      appState.isEnriching = false;
+      enrichBtn.disabled = false;
+      enrichmentStatus.textContent = failed
+        ? `Đã cập nhật ${updated} từ; ${failed} từ chưa lấy được dữ liệu. Bạn vẫn có thể sửa thủ công.`
+        : `Đã cập nhật ${updated} từ. Gợi ý được lưu cục bộ để lần sau tải nhanh hơn.`;
     }
 
     function saveWrongGlobal() {
@@ -1238,10 +1797,37 @@ Listening - UNIT 2
       } catch (e) {}
     }
 
+    function emptyCounter() {
+      return { attempted: 0, correct: 0, wrong: 0, skipped: 0 };
+    }
+
+    function normalizeCounter(value) {
+      const source = value && typeof value === "object" ? value : {};
+      return {
+        attempted: Math.max(0, Number(source.attempted) || 0),
+        correct: Math.max(0, Number(source.correct) || 0),
+        wrong: Math.max(0, Number(source.wrong) || 0),
+        skipped: Math.max(0, Number(source.skipped) || 0)
+      };
+    }
+
+    function localDateKey(date = new Date()) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
     function saveAdvancedStats() {
       localStorage.setItem(STATS_KEY, JSON.stringify({
+        version: 2,
         sessionHistory: appState.sessionHistory,
-        hardWords: appState.hardWords
+        hardWords: appState.hardWords,
+        lifetimeStats: appState.lifetimeStats,
+        modeStats: appState.modeStats,
+        groupStats: appState.groupStats,
+        dailyStats: appState.dailyStats,
+        wordPerformance: appState.wordPerformance
       }));
     }
 
@@ -1250,8 +1836,64 @@ Listening - UNIT 2
       if (!raw) return;
       try {
         const data = JSON.parse(raw);
-        appState.sessionHistory = Array.isArray(data.sessionHistory) ? data.sessionHistory : [];
-        appState.hardWords = data.hardWords || {};
+        appState.sessionHistory = Array.isArray(data.sessionHistory) ? data.sessionHistory.slice(-100) : [];
+        appState.hardWords = data.hardWords && typeof data.hardWords === "object" ? data.hardWords : {};
+
+        if (data.lifetimeStats) {
+          appState.lifetimeStats = {
+            ...normalizeCounter(data.lifetimeStats),
+            sessions: Math.max(0, Number(data.lifetimeStats.sessions) || 0),
+            bestStreak: Math.max(0, Number(data.lifetimeStats.bestStreak) || 0)
+          };
+        } else if (appState.sessionHistory.length) {
+          const inferred = appState.sessionHistory.reduce((total, session) => ({
+            attempted: total.attempted + (Number(session.attempted) || 0),
+            correct: total.correct + (Number(session.correct) || 0),
+            wrong: total.wrong + (Number(session.wrong) || 0),
+            skipped: total.skipped + (Number(session.skipped) || 0)
+          }), emptyCounter());
+          appState.lifetimeStats = {
+            ...inferred,
+            sessions: appState.sessionHistory.length,
+            bestStreak: Math.max(0, ...appState.sessionHistory.map(session => Number(session.bestStreak) || 0))
+          };
+        }
+
+        appState.modeStats = data.modeStats && typeof data.modeStats === "object" ? data.modeStats : {};
+        appState.groupStats = data.groupStats && typeof data.groupStats === "object" ? data.groupStats : {};
+        appState.dailyStats = data.dailyStats && typeof data.dailyStats === "object" ? data.dailyStats : {};
+        appState.wordPerformance = data.wordPerformance && typeof data.wordPerformance === "object" ? data.wordPerformance : {};
+
+        if (!Object.keys(appState.modeStats).length && appState.sessionHistory.length) {
+          appState.sessionHistory.forEach(session => {
+            const key = session.mode || "Không rõ";
+            const counter = normalizeCounter(appState.modeStats[key]);
+            counter.attempted += Number(session.attempted) || 0;
+            counter.correct += Number(session.correct) || 0;
+            counter.wrong += Number(session.wrong) || 0;
+            counter.skipped += Number(session.skipped) || 0;
+            appState.modeStats[key] = counter;
+          });
+        }
+
+        if (!Object.keys(appState.groupStats).length && appState.sessionHistory.some(session => session.group)) {
+          appState.sessionHistory.forEach(session => {
+            if (!session.group) return;
+            const counter = normalizeCounter(appState.groupStats[session.group]);
+            counter.attempted += Number(session.attempted) || 0;
+            counter.correct += Number(session.correct) || 0;
+            counter.wrong += Number(session.wrong) || 0;
+            counter.skipped += Number(session.skipped) || 0;
+            appState.groupStats[session.group] = counter;
+          });
+        }
+
+        Object.keys(appState.modeStats).forEach(key => appState.modeStats[key] = normalizeCounter(appState.modeStats[key]));
+        Object.keys(appState.groupStats).forEach(key => appState.groupStats[key] = normalizeCounter(appState.groupStats[key]));
+        Object.keys(appState.dailyStats).forEach(key => {
+          const counter = normalizeCounter(appState.dailyStats[key]);
+          appState.dailyStats[key] = { ...counter, sessions: Math.max(0, Number(appState.dailyStats[key]?.sessions) || 0) };
+        });
       } catch (e) {}
     }
 
@@ -1268,6 +1910,7 @@ Listening - UNIT 2
       document.body.classList.toggle("dark");
       saveThemeState();
       renderCharts();
+      renderAdvancedDashboard();
     }
 
     function renderMainWrongSummary() {
@@ -1284,6 +1927,22 @@ Listening - UNIT 2
       `;
     }
 
+    function lexicalMarkup(item) {
+      const synonyms = uniqueStrings(item?.synonyms);
+      const family = normalizeFamily(item?.wordFamily);
+      if (!synonyms.length && !family.length) {
+        return `<div class="lexical-row"><span class="lexical-label">Mở rộng</span><span>Chưa có dữ liệu — bấm “Sửa” hoặc lấy gợi ý tự động.</span></div>`;
+      }
+
+      const synonymHtml = synonyms.length
+        ? `<div class="lexical-row"><span class="lexical-label">Đồng nghĩa</span>${synonyms.map(word => `<span class="lexical-chip">${escapeHtml(word)}</span>`).join("")}</div>`
+        : "";
+      const familyHtml = family.length
+        ? `<div class="lexical-row"><span class="lexical-label">Word family</span>${family.map(member => `<span class="lexical-chip">${escapeHtml(member.word)}${member.pos ? ` · ${escapeHtml(member.pos)}` : ""}</span>`).join("")}</div>`
+        : "";
+      return synonymHtml + familyHtml;
+    }
+
     function renderPreview() {
       totalWords.textContent = appState.entries.length;
       totalGroups.textContent = appState.groups.length;
@@ -1295,11 +1954,20 @@ Listening - UNIT 2
       } else {
         previewBox.innerHTML = appState.entries
           .slice(0, 150)
-          .map(item => `
+          .map((item, index) => `
             <div class="preview-item">
               <div class="preview-meta">${escapeHtml(item.group)}</div>
               <div class="preview-word">${escapeHtml(item.word)}</div>
               <div>${escapeHtml(item.meaning)}</div>
+              <div class="lexical-block">${lexicalMarkup(item)}</div>
+              <details class="lexical-editor">
+                <summary>Sửa đồng nghĩa / word family</summary>
+                <div class="lexical-editor-grid">
+                  <input data-field="synonyms" value="${escapeAttr(uniqueStrings(item.synonyms).join(", "))}" placeholder="Đồng nghĩa, cách nhau bằng dấu phẩy" />
+                  <input data-field="wordFamily" value="${escapeAttr(familyToInput(item.wordFamily))}" placeholder="noun: action; verb: act; adjective: active" />
+                  <button class="btn-secondary save-lexical-btn" data-entry-index="${index}" type="button">Lưu phần mở rộng</button>
+                </div>
+              </details>
             </div>
           `)
           .join("");
@@ -1384,9 +2052,20 @@ Listening - UNIT 2
     }
 
     function renderHardWords() {
-      const list = Object.values(appState.hardWords)
+      const performanceList = Object.values(appState.wordPerformance)
+        .map(item => ({
+          ...item,
+          attempted: Number(item.attempted) || 0,
+          correct: Number(item.correct) || 0,
+          wrong: Number(item.wrong) || 0,
+          errorRate: item.attempted ? Math.round(((Number(item.wrong) || 0) / Number(item.attempted)) * 100) : 0
+        }))
+        .filter(item => item.wrong > 0)
+        .sort((a, b) => b.errorRate - a.errorRate || b.wrong - a.wrong || b.attempted - a.attempted);
+      const legacyList = Object.values(appState.hardWords)
         .sort((a, b) => b.score - a.score || b.wrong - a.wrong)
-        .slice(0, 12);
+        .map(item => ({ ...item, attempted: (Number(item.wrong) || 0) + (Number(item.correct) || 0), errorRate: 0 }));
+      const list = (performanceList.length ? performanceList : legacyList).slice(0, 12);
 
       if (!list.length) {
         hardWordList.innerHTML = `<div class="empty">Chưa có dữ liệu.</div>`;
@@ -1397,15 +2076,23 @@ Listening - UNIT 2
         <div class="wrong-item">
           <div class="w">${escapeHtml(item.word)}</div>
           <div class="m">${escapeHtml(item.meaning)}</div>
-          <div class="meta">Sai: ${item.wrong} • Đúng lại: ${item.correct} • Độ khó: ${item.score}</div>
+          <div class="meta">Sai: ${item.wrong} • Đúng: ${item.correct} • Đã gặp: ${item.attempted}${item.errorRate ? ` • Tỷ lệ sai: ${item.errorRate}%` : ""}</div>
         </div>
       `).join("");
     }
 
     function getPoolBySelection() {
       if (appState.selectedMode === "wrong-only") return getSmartWrongPool();
-      if (appState.selectedGroup === "__all__") return [...appState.entries];
-      return appState.entries.filter(item => item.group === appState.selectedGroup);
+      let pool = appState.selectedGroup === "__all__"
+        ? [...appState.entries]
+        : appState.entries.filter(item => item.group === appState.selectedGroup);
+      if (appState.selectedMode === "synonym") {
+        pool = pool.filter(item => uniqueStrings(item.synonyms).length);
+      }
+      if (appState.selectedMode === "word-family") {
+        pool = pool.filter(item => normalizeFamily(item.wordFamily).length);
+      }
+      return pool;
     }
 
     function randomMode() {
@@ -1415,10 +2102,20 @@ Listening - UNIT 2
       if (appState.selectedMode === "speed") return "multiple";
       if (appState.selectedMode === "flashcard") return "flashcard";
       if (appState.selectedMode === "vi-to-en") return "vi-to-en";
+      if (appState.selectedMode === "synonym") return "synonym";
+      if (appState.selectedMode === "word-family") return "word-family";
       return appState.selectedMode;
     }
 
+    function completedSessionCount() {
+      return appState.attempted + appState.skipped;
+    }
+
     function startStudySession(forceWrongOnly = false) {
+      if (appState.sessionStartedAt && !appState.sessionRecorded && completedSessionCount() > 0) {
+        recordSessionHistory("restarted");
+      }
+
       appState.selectedGroup = groupSelect.value;
       appState.selectedMode = forceWrongOnly ? "wrong-only" : modeSelect.value;
       appState.targetCount = Number(countSelect.value);
@@ -1430,13 +2127,21 @@ Listening - UNIT 2
       appState.attempted = 0;
       appState.correct = 0;
       appState.streak = 0;
+      appState.bestSessionStreak = 0;
+      appState.skipped = 0;
       appState.wrongSession = [];
       appState.answered = false;
       appState.finished = false;
+      appState.sessionStartedAt = Date.now();
+      appState.sessionRecorded = false;
 
       if (!appState.quizPool.length) {
         if (appState.selectedMode === "wrong-only") {
           alert("Chưa có từ sai nào để học lại.");
+        } else if (appState.selectedMode === "synonym") {
+          alert("Nhóm này chưa có dữ liệu từ đồng nghĩa. Hãy lấy gợi ý hoặc thêm thủ công trước.");
+        } else if (appState.selectedMode === "word-family") {
+          alert("Nhóm này chưa có dữ liệu word family. Hãy lấy gợi ý hoặc thêm thủ công trước.");
         } else {
           alert("Không có dữ liệu phù hợp để bắt đầu học.");
         }
@@ -1448,9 +2153,11 @@ Listening - UNIT 2
           appState.selectedMode === "multiple" ? "Trắc nghiệm" :
           appState.selectedMode === "typing" ? "Nhập nghĩa tiếng Việt" :
           appState.selectedMode === "mixed" ? "Trộn" :
-          appState.selectedMode === "flashcard" ? "Flashcard" :
-          appState.selectedMode === "vi-to-en" ? "Việt → Anh" :
-          appState.selectedMode === "speed" ? "Speed mode" : "Học lại từ sai"
+           appState.selectedMode === "flashcard" ? "Flashcard" :
+           appState.selectedMode === "vi-to-en" ? "Việt → Anh" :
+           appState.selectedMode === "synonym" ? "Từ đồng nghĩa" :
+           appState.selectedMode === "word-family" ? "Word family" :
+           appState.selectedMode === "speed" ? "Speed mode" : "Học lại từ sai"
         }`;
 
       feedbackBox.className = "feedback";
@@ -1463,23 +2170,25 @@ Listening - UNIT 2
       renderHardWords();
       switchScreen(studyScreen);
       loadNextQuestion();
+      setTimeout(renderCharts, 0);
     }
 
     function updateStudyStats() {
       correctCount.textContent = appState.correct;
       attemptedCount.textContent = appState.attempted;
       streakCount.textContent = appState.streak;
-      wrongCount.textContent = appState.wrongSession.length;
+      wrongCount.textContent = Math.max(0, appState.attempted - appState.correct);
+      skippedCount.textContent = appState.skipped;
 
       const accuracy = appState.attempted ? Math.round((appState.correct / appState.attempted) * 100) : 0;
       quizAccuracyText.textContent = `Accuracy ${accuracy}%`;
 
       if (appState.targetCount >= 9999) {
-        quizProgressText.textContent = `${appState.attempted} câu đã làm`;
-        quizProgressFill.style.width = `${Math.min(appState.attempted % 100, 100)}%`;
+        quizProgressText.textContent = `${completedSessionCount()} câu đã làm`;
+        quizProgressFill.style.width = `${Math.min(completedSessionCount() % 100, 100)}%`;
       } else {
-        quizProgressText.textContent = `${Math.min(appState.attempted, appState.targetCount)} / ${appState.targetCount}`;
-        quizProgressFill.style.width = `${Math.min((appState.attempted / appState.targetCount) * 100, 100)}%`;
+        quizProgressText.textContent = `${Math.min(completedSessionCount(), appState.targetCount)} / ${appState.targetCount}`;
+        quizProgressFill.style.width = `${Math.min((completedSessionCount() / appState.targetCount) * 100, 100)}%`;
       }
     }
 
@@ -1509,6 +2218,15 @@ Listening - UNIT 2
     function clearFeedback() {
       feedbackBox.className = "feedback";
       feedbackBox.innerHTML = "";
+      lexicalStudyPanel.className = "lexical-study-panel";
+      lexicalStudyPanel.innerHTML = "";
+    }
+
+    function showLexicalDetails(item) {
+      const markup = lexicalMarkup(item);
+      if (!uniqueStrings(item?.synonyms).length && !normalizeFamily(item?.wordFamily).length) return;
+      lexicalStudyPanel.innerHTML = `<b>Ghi nhớ thêm</b>${markup}`;
+      lexicalStudyPanel.className = "lexical-study-panel show";
     }
 
     function beep(type = "good") {
@@ -1599,7 +2317,83 @@ Listening - UNIT 2
       }, 1000);
     }
 
+    function updatePerformanceCounter(store, key, outcome) {
+      const safeKey = String(key || "Không rõ");
+      const counter = normalizeCounter(store[safeKey]);
+      if (outcome === "skipped") {
+        counter.skipped += 1;
+      } else {
+        counter.attempted += 1;
+        if (outcome === "correct") counter.correct += 1;
+        else counter.wrong += 1;
+      }
+      store[safeKey] = counter;
+    }
+
+    function recordAnswerStats(isCorrect, item) {
+      const outcome = isCorrect ? "correct" : "wrong";
+      const lifetime = appState.lifetimeStats;
+      lifetime.attempted += 1;
+      lifetime[outcome] += 1;
+      lifetime.bestStreak = Math.max(lifetime.bestStreak, appState.streak);
+      appState.bestSessionStreak = Math.max(appState.bestSessionStreak, appState.streak);
+
+      updatePerformanceCounter(appState.modeStats, appState.currentMode, outcome);
+      updatePerformanceCounter(appState.groupStats, item.group || "Chưa phân nhóm", outcome);
+
+      const today = localDateKey();
+      const daily = { ...normalizeCounter(appState.dailyStats[today]), sessions: Number(appState.dailyStats[today]?.sessions) || 0 };
+      daily.attempted += 1;
+      daily[outcome] += 1;
+      appState.dailyStats[today] = daily;
+
+      const wordKey = item.word + "||" + item.meaning;
+      const wordStats = {
+        ...normalizeCounter(appState.wordPerformance[wordKey]),
+        word: item.word,
+        meaning: item.meaning,
+        group: item.group,
+        lastSeen: new Date().toISOString()
+      };
+      wordStats.attempted += 1;
+      wordStats[outcome] += 1;
+      appState.wordPerformance[wordKey] = wordStats;
+
+      saveAdvancedStats();
+      renderAdvancedDashboard();
+    }
+
+    function recordSkipStats(item) {
+      appState.skipped += 1;
+      appState.streak = 0;
+      appState.lifetimeStats.skipped += 1;
+      updatePerformanceCounter(appState.modeStats, appState.currentMode, "skipped");
+      updatePerformanceCounter(appState.groupStats, item?.group || "Chưa phân nhóm", "skipped");
+
+      const today = localDateKey();
+      const daily = { ...normalizeCounter(appState.dailyStats[today]), sessions: Number(appState.dailyStats[today]?.sessions) || 0 };
+      daily.skipped += 1;
+      appState.dailyStats[today] = daily;
+
+      if (item) {
+        const wordKey = item.word + "||" + item.meaning;
+        const wordStats = {
+          ...normalizeCounter(appState.wordPerformance[wordKey]),
+          word: item.word,
+          meaning: item.meaning,
+          group: item.group,
+          lastSeen: new Date().toISOString()
+        };
+        wordStats.skipped += 1;
+        appState.wordPerformance[wordKey] = wordStats;
+      }
+
+      saveAdvancedStats();
+      renderAdvancedDashboard();
+    }
+
     function finishAnswer(isCorrect, item) {
+      if (appState.answered || appState.finished) return;
       appState.answered = true;
       appState.attempted += 1;
 
@@ -1624,11 +2418,14 @@ Listening - UNIT 2
         saveWrongGlobal();
       }
 
+      recordAnswerStats(isCorrect, item);
+
       clearTimer();
       updateStudyStats();
       renderWrongList();
       renderMainWrongSummary();
       renderHardWords();
+      showLexicalDetails(item);
     }
 
     function pickQuestion() {
@@ -1660,16 +2457,59 @@ Listening - UNIT 2
       return shuffle(answers);
     }
 
+    function getLexicalOptions(q, correctAnswer, mode) {
+      const ownAnswers = new Set([
+        normalizeWord(q.word),
+        ...uniqueStrings(q.synonyms).map(normalizeWord),
+        ...normalizeFamily(q.wordFamily).map(item => normalizeWord(item.word))
+      ]);
+      const candidates = [];
+
+      appState.quizPool.forEach(item => {
+        if (item === q) return;
+        const values = mode === "synonym"
+          ? [...uniqueStrings(item.synonyms), item.word]
+          : [...normalizeFamily(item.wordFamily).map(member => member.word), item.word];
+        values.forEach(value => {
+          const key = normalizeWord(value);
+          if (key && !ownAnswers.has(key)) candidates.push(value);
+        });
+      });
+
+      appState.entries.forEach(item => {
+        const key = normalizeWord(item.word);
+        if (key && !ownAnswers.has(key)) candidates.push(item.word);
+      });
+
+      const answers = [correctAnswer];
+      shuffle(uniqueStrings(candidates)).some(value => {
+        if (answers.length >= 4) return true;
+        answers.push(value);
+        return false;
+      });
+      return shuffle(answers);
+    }
+
     function isTypingCorrect(input, meaning) {
       const normalizedUser = normalizeMeaning(input);
       if (!normalizedUser) return false;
       const variants = splitMeaningVariants(meaning);
       if (variants.includes(normalizedUser)) return true;
-      return variants.some(v => v.includes(normalizedUser) || normalizedUser.includes(v));
+      return variants.some(variant => {
+        const shorter = Math.min(variant.length, normalizedUser.length);
+        const longer = Math.max(variant.length, normalizedUser.length);
+        return shorter >= 4 && shorter / longer >= 0.65 &&
+          (variant.includes(normalizedUser) || normalizedUser.includes(variant));
+      });
     }
 
     function isEnglishAnswerCorrect(input, correctWord) {
-      return normalizeWord(input) === normalizeWord(correctWord);
+      const normalizedInput = normalizeWord(input);
+      return String(correctWord || "")
+        .split(/\s*(?:\/|;|\bor\b)\s*/i)
+        .map(normalizeWord)
+        .filter(Boolean)
+        .includes(normalizedInput);
     }
 
     function renderMultiple(q) {
@@ -1710,6 +2550,45 @@ Listening - UNIT 2
       });
     }
 
+    function renderLexicalMultiple(q, mode) {
+      multipleArea.style.display = "block";
+      typingArea.style.display = "none";
+      flashcardArea.style.display = "none";
+      optionsBox.innerHTML = "";
+
+      const sourceAnswers = mode === "synonym"
+        ? uniqueStrings(q.synonyms)
+        : normalizeFamily(q.wordFamily).map(item => item.word);
+      const correctAnswer = sourceAnswers[Math.floor(Math.random() * sourceAnswers.length)];
+      const opts = getLexicalOptions(q, correctAnswer, mode);
+
+      opts.forEach((opt, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "option";
+        btn.textContent = `${index + 1}. ${opt}`;
+        btn.dataset.raw = opt;
+        btn.onclick = () => {
+          if (appState.answered) return;
+          const isCorrect = normalizeWord(opt) === normalizeWord(correctAnswer);
+          optionsBox.querySelectorAll(".option").forEach(item => {
+            item.disabled = true;
+            if (normalizeWord(item.dataset.raw) === normalizeWord(correctAnswer)) item.classList.add("correct");
+          });
+          btn.classList.add(isCorrect ? "correct" : "wrong");
+          const relation = mode === "synonym" ? "từ đồng nghĩa" : "từ cùng word family";
+          showFeedback(
+            isCorrect
+              ? `✅ Chính xác! <b>${escapeHtml(correctAnswer)}</b> là ${relation} của <b>${escapeHtml(q.word)}</b>.`
+              : `❌ Chưa đúng. <b>${escapeHtml(correctAnswer)}</b> là ${relation} của <b>${escapeHtml(q.word)}</b>.`,
+            isCorrect ? "good" : "bad"
+          );
+          finishAnswer(isCorrect, q);
+        };
+        optionsBox.appendChild(btn);
+      });
+    }
+
     function renderTyping(q) {
       multipleArea.style.display = "none";
       flashcardArea.style.display = "none";
@@ -1725,7 +2604,7 @@ Listening - UNIT 2
       appState.flashcardFlipped = false;
 
       flashcardFront.textContent = q.word;
-      flashcardBack.textContent = q.meaning;
+      flashcardBack.innerHTML = `<div><b>${escapeHtml(q.meaning)}</b></div><div class="lexical-block">${lexicalMarkup(q)}</div>`;
       flashcardBack.style.display = "none";
       questionNote.textContent = "Bấm vào thẻ để lật. Chọn 'Đã nhớ' hoặc 'Chưa nhớ'.";
     }
@@ -1798,7 +2677,8 @@ Listening - UNIT 2
     }
 
     function loadNextQuestion() {
-      if (appState.targetCount < 9999 && appState.attempted >= appState.targetCount) {
+      if (appState.finished) return;
+      if (appState.targetCount < 9999 && completedSessionCount() >= appState.targetCount) {
         showFinishScreen();
         return;
       }
@@ -1821,7 +2701,9 @@ Listening - UNIT 2
         `${q.group} • ${
           appState.currentMode === "multiple" ? "Trắc nghiệm" :
           appState.currentMode === "typing" ? "Nhập nghĩa" :
-          appState.currentMode === "flashcard" ? "Flashcard" : "Việt → Anh"
+          appState.currentMode === "flashcard" ? "Flashcard" :
+          appState.currentMode === "vi-to-en" ? "Việt → Anh" :
+          appState.currentMode === "synonym" ? "Từ đồng nghĩa" : "Word family"
         }`;
 
       if (appState.currentMode === "multiple") {
@@ -1838,6 +2720,14 @@ Listening - UNIT 2
         renderFlashcard(q);
       } else if (appState.currentMode === "vi-to-en") {
         renderViToEn(q);
+      } else if (appState.currentMode === "synonym") {
+        questionWord.textContent = q.word;
+        questionNote.textContent = "Chọn từ đồng nghĩa phù hợp.";
+        renderLexicalMultiple(q, "synonym");
+      } else if (appState.currentMode === "word-family") {
+        questionWord.textContent = q.word;
+        questionNote.textContent = "Chọn một từ thuộc cùng word family.";
+        renderLexicalMultiple(q, "word-family");
       }
 
       if (appState.selectedMode === "speed") startTimer(10);
@@ -1845,21 +2735,172 @@ Listening - UNIT 2
       updateStudyStats();
     }
 
-    function recordSessionHistory() {
+    function recordSessionHistory(status = "completed") {
+      if (appState.sessionRecorded || completedSessionCount() === 0) return false;
       const wrong = appState.attempted - appState.correct;
       const accuracy = appState.attempted ? Math.round((appState.correct / appState.attempted) * 100) : 0;
+      const now = new Date();
+      const durationSeconds = appState.sessionStartedAt
+        ? Math.max(1, Math.round((Date.now() - appState.sessionStartedAt) / 1000))
+        : 0;
 
       appState.sessionHistory.push({
-        date: new Date().toLocaleDateString("vi-VN"),
+        date: now.toLocaleDateString("vi-VN"),
+        dateKey: localDateKey(now),
         correct: appState.correct,
         wrong,
+        skipped: appState.skipped,
         attempted: appState.attempted,
         accuracy,
-        mode: appState.selectedMode
+        mode: appState.selectedMode,
+        group: appState.selectedGroup,
+        bestStreak: appState.bestSessionStreak,
+        durationSeconds,
+        status
       });
 
-      appState.sessionHistory = appState.sessionHistory.slice(-20);
+      appState.sessionHistory = appState.sessionHistory.slice(-100);
+      appState.sessionRecorded = true;
+      appState.lifetimeStats.sessions += 1;
+      const today = localDateKey(now);
+      const daily = { ...normalizeCounter(appState.dailyStats[today]), sessions: Number(appState.dailyStats[today]?.sessions) || 0 };
+      daily.sessions += 1;
+      appState.dailyStats[today] = daily;
       saveAdvancedStats();
+      renderAdvancedDashboard();
+      return true;
+    }
+
+    function modeLabel(mode) {
+      return {
+        multiple: "Trắc nghiệm",
+        typing: "Nhập nghĩa",
+        mixed: "Trộn",
+        flashcard: "Flashcard",
+        "vi-to-en": "Việt → Anh",
+        synonym: "Đồng nghĩa",
+        "word-family": "Word family",
+        speed: "Speed",
+        "wrong-only": "Học từ sai"
+      }[mode] || mode || "Không rõ";
+    }
+
+    function counterAccuracy(counter) {
+      const safe = normalizeCounter(counter);
+      return safe.attempted ? Math.round((safe.correct / safe.attempted) * 100) : 0;
+    }
+
+    function getStudyDayStreak() {
+      const activeDays = new Set(Object.entries(appState.dailyStats)
+        .filter(([, value]) => (Number(value.attempted) || 0) + (Number(value.skipped) || 0) > 0)
+        .map(([key]) => key));
+      if (!activeDays.size) return 0;
+
+      const cursor = new Date();
+      cursor.setHours(12, 0, 0, 0);
+      if (!activeDays.has(localDateKey(cursor))) cursor.setDate(cursor.getDate() - 1);
+      let streak = 0;
+      while (activeDays.has(localDateKey(cursor))) {
+        streak += 1;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+      return streak;
+    }
+
+    function lastDays(count) {
+      const days = [];
+      const cursor = new Date();
+      cursor.setHours(12, 0, 0, 0);
+      for (let offset = count - 1; offset >= 0; offset--) {
+        const date = new Date(cursor);
+        date.setDate(cursor.getDate() - offset);
+        days.push({
+          key: localDateKey(date),
+          label: date.toLocaleDateString("vi-VN", { weekday: "short", day: "2-digit" })
+        });
+      }
+      return days;
+    }
+
+    function renderAdvancedDashboard() {
+      const lifetime = appState.lifetimeStats;
+      const lifetimeAcc = lifetime.attempted ? Math.round((lifetime.correct / lifetime.attempted) * 100) : 0;
+      lifetimeAttempted.textContent = lifetime.attempted;
+      lifetimeAccuracy.textContent = `${lifetimeAcc}%`;
+      lifetimeSessions.textContent = lifetime.sessions;
+      lifetimeBestStreak.textContent = lifetime.bestStreak;
+      studyDayStreak.textContent = getStudyDayStreak();
+
+      const groups = Object.entries(appState.groupStats)
+        .map(([name, stats]) => ({ name, stats: normalizeCounter(stats), accuracy: counterAccuracy(stats) }))
+        .sort((a, b) => b.stats.attempted - a.stats.attempted || a.accuracy - b.accuracy);
+      groupPerformance.innerHTML = groups.length
+        ? groups.map(item => `<div class="performance-item"><div class="name" title="${escapeAttr(item.name)}">${escapeHtml(item.name)}</div><div class="value"><b>${item.accuracy}%</b><br>${item.stats.correct}/${item.stats.attempted} đúng · ${item.stats.skipped} bỏ qua</div></div>`).join("")
+        : `<div class="empty">Chưa có dữ liệu.</div>`;
+
+      const recent = appState.sessionHistory.slice(-6).reverse();
+      recentSessions.innerHTML = recent.length
+        ? recent.map(session => `<div class="performance-item"><div class="name">${escapeHtml(session.date || "Không rõ ngày")} · ${escapeHtml(modeLabel(session.mode))}</div><div class="value"><b>${Number(session.accuracy) || 0}%</b><br>${Number(session.correct) || 0}/${Number(session.attempted) || 0} đúng${Number(session.skipped) ? ` · ${Number(session.skipped)} bỏ qua` : ""}</div></div>`).join("")
+        : `<div class="empty">Chưa có phiên hoàn thành.</div>`;
+
+      const eligibleGroups = groups.filter(item => item.stats.attempted >= 3);
+      const weakestGroup = [...eligibleGroups].sort((a, b) => a.accuracy - b.accuracy)[0];
+      const modes = Object.entries(appState.modeStats)
+        .map(([name, stats]) => ({ name, stats: normalizeCounter(stats), accuracy: counterAccuracy(stats) }))
+        .filter(item => item.stats.attempted > 0)
+        .sort((a, b) => b.accuracy - a.accuracy || b.stats.attempted - a.stats.attempted);
+      const bestMode = modes[0];
+      const skipRate = lifetime.attempted + lifetime.skipped
+        ? Math.round((lifetime.skipped / (lifetime.attempted + lifetime.skipped)) * 100)
+        : 0;
+      const insights = [];
+      if (bestMode) insights.push(`Bạn làm tốt nhất ở <b>${escapeHtml(modeLabel(bestMode.name))}</b> (${bestMode.accuracy}%).`);
+      if (weakestGroup) insights.push(`Nên ôn thêm nhóm <b>${escapeHtml(weakestGroup.name)}</b> (${weakestGroup.accuracy}%).`);
+      if (skipRate >= 20) insights.push(`Tỷ lệ bỏ qua đang là <b>${skipRate}%</b>; thử giảm số câu hoặc chuyển sang flashcard.`);
+      advancedInsight.innerHTML = insights.length
+        ? insights.join(" ")
+        : "Hoàn thành ít nhất vài câu để hệ thống tạo nhận xét học tập.";
+
+      if (!mainScreen.classList.contains("active") || typeof Chart === "undefined") return;
+
+      const days = lastDays(7);
+      if (activityChartInstance) activityChartInstance.destroy();
+      if (modeChartInstance) modeChartInstance.destroy();
+      activityChartInstance = new Chart(document.getElementById("activityChart"), {
+        type: "bar",
+        data: {
+          labels: days.map(day => day.label),
+          datasets: [
+            { label: "Đã trả lời", data: days.map(day => Number(appState.dailyStats[day.key]?.attempted) || 0), backgroundColor: "rgba(37,99,235,.75)", borderRadius: 7 },
+            { label: "Bỏ qua", data: days.map(day => Number(appState.dailyStats[day.key]?.skipped) || 0), backgroundColor: "rgba(245,158,11,.75)", borderRadius: 7 }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { labels: { color: chartTextColor() } } },
+          scales: {
+            x: { stacked: true, ticks: { color: chartTextColor() }, grid: { color: chartGridColor() } },
+            y: { stacked: true, beginAtZero: true, ticks: { precision: 0, color: chartTextColor() }, grid: { color: chartGridColor() } }
+          }
+        }
+      });
+
+      modeChartInstance = new Chart(document.getElementById("modeChart"), {
+        type: "bar",
+        data: {
+          labels: modes.map(item => modeLabel(item.name)),
+          datasets: [{ label: "Accuracy %", data: modes.map(item => item.accuracy), backgroundColor: "rgba(34,197,94,.75)", borderRadius: 7 }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { beginAtZero: true, max: 100, ticks: { color: chartTextColor() }, grid: { color: chartGridColor() } },
+            y: { ticks: { color: chartTextColor() }, grid: { display: false } }
+          }
+        }
+      });
     }
 
     function chartTextColor() {
@@ -1873,12 +2914,14 @@ Listening - UNIT 2
     function renderCharts() {
       const accuracyCanvas = document.getElementById("accuracyChart");
       const sessionCanvas = document.getElementById("sessionChart");
-      if (!accuracyCanvas || !sessionCanvas) return;
+      if (!accuracyCanvas || !sessionCanvas || typeof Chart === "undefined") return;
 
-      const labels = appState.sessionHistory.map((s, i) => `P${i + 1}`);
-      const accuracies = appState.sessionHistory.map(s => s.accuracy);
-      const corrects = appState.sessionHistory.map(s => s.correct);
-      const wrongs = appState.sessionHistory.map(s => s.wrong);
+      const chartSessions = appState.sessionHistory.slice(-20);
+      const firstSessionNumber = Math.max(1, appState.sessionHistory.length - chartSessions.length + 1);
+      const labels = chartSessions.map((s, i) => `P${firstSessionNumber + i}`);
+      const accuracies = chartSessions.map(s => s.accuracy);
+      const corrects = chartSessions.map(s => s.correct);
+      const wrongs = chartSessions.map(s => s.wrong);
 
       if (accuracyChartInstance) accuracyChartInstance.destroy();
       if (sessionChartInstance) sessionChartInstance.destroy();
@@ -1960,22 +3003,30 @@ Listening - UNIT 2
       });
     }
 
-    function showFinishScreen() {
+    function showFinishScreen(manual = false) {
+      if (appState.finished) return;
+      if (completedSessionCount() === 0) {
+        if (manual) alert("Bạn chưa học câu nào trong phiên này.");
+        return;
+      }
       appState.finished = true;
+      clearTimer();
       quizBody.style.display = "none";
       finishBox.style.display = "block";
 
-      const wrongNum = appState.wrongSession.length;
+      const wrongNum = Math.max(0, appState.attempted - appState.correct);
       const accuracy = appState.attempted ? Math.round((appState.correct / appState.attempted) * 100) : 0;
 
-      recordSessionHistory();
+      recordSessionHistory(manual ? "ended" : "completed");
       renderCharts();
       renderHardWords();
 
       finishText.innerHTML = `
         Kết quả của bạn: <b>${appState.correct}/${appState.attempted}</b> câu đúng •
         <b>${accuracy}%</b> accuracy •
-        <b>${wrongNum}</b> từ sai.
+        <b>${wrongNum}</b> lượt sai •
+        <b>${appState.skipped}</b> câu bỏ qua •
+        streak tốt nhất <b>${appState.bestSessionStreak}</b>.
       `;
     }
 
@@ -1998,12 +3049,35 @@ Listening - UNIT 2
       }
     });
 
+    enrichBtn.addEventListener("click", enrichVocabulary);
+
+    previewBox.addEventListener("click", event => {
+      const button = event.target.closest(".save-lexical-btn");
+      if (!button) return;
+      const index = Number(button.dataset.entryIndex);
+      const item = appState.entries[index];
+      const editor = button.closest(".lexical-editor-grid");
+      if (!item || !editor) return;
+
+      const synonymValue = editor.querySelector('[data-field="synonyms"]')?.value || "";
+      const familyValue = editor.querySelector('[data-field="wordFamily"]')?.value || "";
+      appState.entries[index] = {
+        ...hydrateEntry(item),
+        synonyms: uniqueStrings(synonymValue.split(/[,;]/)),
+        wordFamily: parseFamilyInput(familyValue),
+        lexicalSource: "manual"
+      };
+      saveEntries();
+      renderPreview();
+      enrichmentStatus.textContent = `Đã lưu phần mở rộng cho “${item.word}”.`;
+    });
+
     loadSampleBtn.addEventListener("click", () => {
       rawInput.value = `Listening - UNIT 2
 1. tenant (n) – người thuê (nhà / mặt bằng)
-2. landlord (n) – chủ nhà, chủ cho thuê
-3. vendor (n) – người bán, nhà cung cấp
-4. prototype (n) – nguyên mẫu
+2. landlord (n) – chủ nhà, chủ cho thuê | syn: property owner, lessor | family: noun: landlady
+3. vendor (n) – người bán, nhà cung cấp | syn: seller, supplier | family: verb: vend; noun: vending
+4. prototype (n) – nguyên mẫu | syn: model, archetype | family: noun: prototyping
 5. employee manual (n) – sổ tay nhân viên
 
 Reading - UNIT 3
@@ -2016,6 +3090,7 @@ mentor (v) – hướng dẫn, cố vấn`;
 
     clearBtn.addEventListener("click", () => {
       rawInput.value = "";
+      enrichmentStatus.textContent = "";
     });
 
     startQuizBtn.addEventListener("click", () => {
@@ -2024,23 +3099,34 @@ mentor (v) – hướng dẫn, cố vấn`;
 
     backToMainBtn.addEventListener("click", () => {
       switchScreen(mainScreen);
+      setTimeout(renderAdvancedDashboard, 0);
     });
+
+    endStudyBtn.addEventListener("click", () => showFinishScreen(true));
 
     restartStudyBtn.addEventListener("click", () => {
       startStudySession(appState.selectedMode === "wrong-only");
     });
 
     nextBtn.addEventListener("click", () => {
-      loadNextQuestion();
+      if (appState.answered) loadNextQuestion();
+      else skipCurrentQuestion();
     });
 
-    skipBtn.addEventListener("click", () => {
+    function skipCurrentQuestion() {
+      if (appState.finished || !appState.currentQuestion) return;
+      if (appState.answered) {
+        loadNextQuestion();
+        return;
+      }
       clearFeedback();
       clearTimer();
-      appState.streak = 0;
+      recordSkipStats(appState.currentQuestion);
       updateStudyStats();
       loadNextQuestion();
-    });
+    }
+
+    skipBtn.addEventListener("click", skipCurrentQuestion);
 
     submitTypingBtn.addEventListener("click", () => submitTypingAnswer(false));
     showAnswerBtn.addEventListener("click", () => submitTypingAnswer(true));
@@ -2127,6 +3213,7 @@ mentor (v) – hướng dẫn, cố vấn`;
 
     function init() {
       loadEntries();
+      loadEnrichmentCache();
       loadWrongGlobal();
       loadAdvancedStats();
       loadThemeState();
@@ -2134,6 +3221,7 @@ mentor (v) – hướng dẫn, cố vấn`;
       renderMainWrongSummary();
       renderHardWords();
       renderCharts();
+      renderAdvancedDashboard();
     }
 
     init();
