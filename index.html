@@ -1029,7 +1029,7 @@
 
     .advanced-summary{
       display:grid;
-      grid-template-columns:repeat(5,1fr);
+      grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
       gap:10px;
       margin-bottom:16px;
     }
@@ -1056,6 +1056,79 @@
     .dashboard-panel h4{
       margin:0 0 10px;
       font-size:15px;
+    }
+
+    .dashboard-panel.wide{grid-column:1 / -1}
+
+    .smart-review-banner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:15px;
+      margin-bottom:14px;
+      border:1px solid rgba(37,99,235,.24);
+      border-radius:17px;
+      background:linear-gradient(135deg,rgba(37,99,235,.11),rgba(124,58,237,.08));
+    }
+
+    .smart-review-banner .smart-title{font-weight:900;margin-bottom:4px}
+
+    .smart-review-banner .smart-copy{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .smart-review-banner button{white-space:nowrap}
+
+    .study-heatmap{
+      display:grid;
+      grid-template-columns:repeat(14,minmax(14px,1fr));
+      gap:5px;
+    }
+
+    .heat-cell{
+      aspect-ratio:1;
+      min-height:14px;
+      border-radius:4px;
+      border:1px solid rgba(148,163,184,.16);
+      background:#e8eef6;
+    }
+
+    .heat-cell.level-1{background:#bfdbfe}
+    .heat-cell.level-2{background:#60a5fa}
+    .heat-cell.level-3{background:#2563eb}
+    .heat-cell.level-4{background:#1d4ed8}
+    body.dark .heat-cell{background:#1e293b}
+    body.dark .heat-cell.level-1{background:#1e40af}
+    body.dark .heat-cell.level-2{background:#2563eb}
+    body.dark .heat-cell.level-3{background:#3b82f6}
+    body.dark .heat-cell.level-4{background:#60a5fa}
+
+    .mastery-stack{display:grid;gap:10px}
+
+    .mastery-row{
+      display:grid;
+      grid-template-columns:96px minmax(0,1fr) 42px;
+      gap:9px;
+      align-items:center;
+      font-size:13px;
+    }
+
+    .mastery-track{
+      height:10px;
+      overflow:hidden;
+      border-radius:999px;
+      background:#e8eef6;
+    }
+
+    body.dark .mastery-track{background:#1e293b}
+
+    .mastery-fill{
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,#2563eb,#22c55e);
     }
 
     .performance-list{
@@ -1223,6 +1296,13 @@
       .game-showcase{
         grid-template-columns:1fr;
       }
+      .smart-review-banner{
+        align-items:stretch;
+        flex-direction:column;
+      }
+      .study-heatmap{
+        grid-template-columns:repeat(7,minmax(14px,1fr));
+      }
     }
   </style>
 </head>
@@ -1336,6 +1416,14 @@ Listening - UNIT 2
               </p>
             </div>
 
+            <div class="smart-review-banner">
+              <div>
+                <div class="smart-title">🧠 Ôn thông minh hôm nay</div>
+                <div id="smartReviewText" class="smart-copy">Đang tính lịch ôn theo mức độ ghi nhớ của bạn…</div>
+              </div>
+              <button id="startSmartReviewBtn" class="btn-primary" type="button">Ôn hôm nay</button>
+            </div>
+
             <div class="game-showcase" aria-label="Chọn nhanh trò chơi từ vựng">
               <button class="game-pick" data-game-mode="memory-match" type="button"><span class="game-icon">🧠</span><span class="game-name">Lật thẻ trí nhớ</span><span class="game-desc">Tìm đúng cặp từ Anh – nghĩa Việt với ít lượt lật nhất.</span></button>
               <button class="game-pick" data-game-mode="word-scramble" type="button"><span class="game-icon">🔤</span><span class="game-name">Xếp chữ</span><span class="game-desc">Giải mã các chữ cái bị đảo dựa trên nghĩa tiếng Việt.</span></button>
@@ -1362,6 +1450,7 @@ Listening - UNIT 2
                   <option value="word-family">Word family</option>
                   <option value="collocation">Collocation</option>
                   <option value="marked-only">Từ đã đánh dấu</option>
+                  <option value="spaced-review">🧠 Ôn thông minh hôm nay</option>
                   <optgroup label="🎮 Trò chơi từ vựng">
                     <option value="memory-match">🧠 Lật thẻ trí nhớ</option>
                     <option value="word-scramble">🔤 Xếp chữ</option>
@@ -1416,6 +1505,9 @@ Listening - UNIT 2
           <div class="mini-stat"><div class="k">Phiên học</div><div class="v" id="lifetimeSessions">0</div></div>
           <div class="mini-stat"><div class="k">Streak tốt nhất</div><div class="v" id="lifetimeBestStreak">0</div></div>
           <div class="mini-stat"><div class="k">Chuỗi ngày học</div><div class="v" id="studyDayStreak">0</div></div>
+          <div class="mini-stat"><div class="k">Cần ôn hôm nay</div><div class="v" id="dueTodayCount">0</div></div>
+          <div class="mini-stat"><div class="k">Đã thành thạo</div><div class="v" id="masteredCount">0</div></div>
+          <div class="mini-stat"><div class="k">Sắp quên 7 ngày</div><div class="v" id="forgettingSoonCount">0</div></div>
         </div>
         <div id="advancedInsight" class="insight-banner">Hoàn thành vài câu để hệ thống tạo nhận xét học tập.</div>
         <div class="dashboard-grid">
@@ -1436,6 +1528,20 @@ Listening - UNIT 2
           <div class="dashboard-panel">
             <h4>Các phiên gần đây</h4>
             <div id="recentSessions" class="performance-list"><div class="empty">Chưa có phiên hoàn thành.</div></div>
+          </div>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dashboard-panel">
+            <h4>Nhịp học 35 ngày</h4>
+            <div id="studyHeatmap" class="study-heatmap"></div>
+          </div>
+          <div class="dashboard-panel">
+            <h4>Mức độ thành thạo</h4>
+            <div id="masteryDistribution" class="mastery-stack"></div>
+          </div>
+          <div class="dashboard-panel wide">
+            <h4>Từ cần ưu tiên</h4>
+            <div id="smartWordList" class="performance-list"><div class="empty">Chưa có dữ liệu.</div></div>
           </div>
         </div>
       </div>
@@ -1817,6 +1923,14 @@ Listening - UNIT 2
     const advancedInsight = document.getElementById("advancedInsight");
     const groupPerformance = document.getElementById("groupPerformance");
     const recentSessions = document.getElementById("recentSessions");
+    const dueTodayCount = document.getElementById("dueTodayCount");
+    const masteredCount = document.getElementById("masteredCount");
+    const forgettingSoonCount = document.getElementById("forgettingSoonCount");
+    const smartReviewText = document.getElementById("smartReviewText");
+    const startSmartReviewBtn = document.getElementById("startSmartReviewBtn");
+    const studyHeatmap = document.getElementById("studyHeatmap");
+    const masteryDistribution = document.getElementById("masteryDistribution");
+    const smartWordList = document.getElementById("smartWordList");
 
     let accuracyChartInstance = null;
     let sessionChartInstance = null;
@@ -2585,9 +2699,120 @@ Listening - UNIT 2
       return `${year}-${month}-${day}`;
     }
 
+    function dateFromKey(key) {
+      const match = String(key || "").match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!match) return null;
+      const date = new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), 12, 0, 0, 0);
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function addDaysKey(dateKey, days) {
+      const date = dateFromKey(dateKey) || new Date();
+      date.setDate(date.getDate() + Number(days || 0));
+      return localDateKey(date);
+    }
+
+    function daysBetweenKeys(fromKey, toKey) {
+      const from = dateFromKey(fromKey);
+      const to = dateFromKey(toKey);
+      if (!from || !to) return 0;
+      return Math.round((to - from) / (24 * 60 * 60 * 1000));
+    }
+
+    function wordPerformanceKey(item) {
+      return `${item.word}||${item.meaning}`;
+    }
+
+    function normalizeWordSchedule(value, item = {}) {
+      const source = value && typeof value === "object" ? value : {};
+      const today = localDateKey();
+      return {
+        ...normalizeCounter(source),
+        word: item.word || source.word || "",
+        meaning: item.meaning || source.meaning || "",
+        group: item.group || source.group || "Chưa phân nhóm",
+        lastSeen: source.lastSeen || "",
+        lastReviewedAt: source.lastReviewedAt || source.lastSeen || "",
+        dueDate: dateFromKey(source.dueDate) ? source.dueDate : today,
+        repetitions: Math.max(0, Number(source.repetitions) || 0),
+        correctStreak: Math.max(0, Number(source.correctStreak) || 0),
+        intervalDays: Math.max(0, Number(source.intervalDays) || 0),
+        easeFactor: Math.max(1.3, Math.min(3.1, Number(source.easeFactor) || 2.3)),
+        lapses: Math.max(0, Number(source.lapses) || 0)
+      };
+    }
+
+    function scheduleAfterOutcome(current, outcome) {
+      const schedule = normalizeWordSchedule(current, current);
+      const today = localDateKey();
+      if (outcome === "correct") {
+        schedule.repetitions += 1;
+        schedule.correctStreak += 1;
+        schedule.intervalDays = schedule.repetitions === 1
+          ? 1
+          : schedule.repetitions === 2
+            ? 3
+            : Math.max(4, Math.round(Math.max(1, schedule.intervalDays) * schedule.easeFactor));
+        schedule.easeFactor = Math.min(3.1, schedule.easeFactor + (schedule.correctStreak >= 3 ? 0.06 : 0.03));
+        schedule.dueDate = addDaysKey(today, schedule.intervalDays);
+      } else if (outcome === "wrong") {
+        schedule.repetitions = 0;
+        schedule.correctStreak = 0;
+        schedule.intervalDays = 1;
+        schedule.easeFactor = Math.max(1.3, schedule.easeFactor - 0.2);
+        schedule.lapses += 1;
+        schedule.dueDate = today;
+      } else {
+        schedule.correctStreak = 0;
+        schedule.dueDate = today;
+      }
+      schedule.lastReviewedAt = new Date().toISOString();
+      return schedule;
+    }
+
+    function predictedRetention(schedule) {
+      if (!schedule.lastReviewedAt || !schedule.attempted) return 0;
+      const lastDate = new Date(schedule.lastReviewedAt);
+      if (Number.isNaN(lastDate.getTime())) return 0;
+      const elapsedDays = Math.max(0, (Date.now() - lastDate.getTime()) / (24 * 60 * 60 * 1000));
+      const stability = Math.max(1, schedule.intervalDays || 1);
+      return Math.max(0, Math.min(100, Math.round(100 * Math.exp(-0.10536 * elapsedDays / stability))));
+    }
+
+    function masteryScore(schedule) {
+      if (!schedule.attempted) return 0;
+      const accuracy = schedule.correct / Math.max(1, schedule.attempted);
+      const learned = accuracy * 55 + Math.min(5, schedule.repetitions) * 9 - Math.min(5, schedule.lapses) * 4;
+      const retentionFactor = 0.65 + predictedRetention(schedule) / 100 * 0.35;
+      return Math.max(0, Math.min(100, Math.round(learned * retentionFactor)));
+    }
+
+    function smartWordRows(entries = appState.entries) {
+      const today = localDateKey();
+      return entries.map(item => {
+        const hydrated = hydrateEntry(item);
+        const schedule = normalizeWordSchedule(appState.wordPerformance[wordPerformanceKey(hydrated)], hydrated);
+        const dueIn = daysBetweenKeys(today, schedule.dueDate);
+        return {
+          item: hydrated,
+          schedule,
+          dueIn,
+          retention: predictedRetention(schedule),
+          mastery: masteryScore(schedule)
+        };
+      });
+    }
+
+    function getDueReviewPool(entries = appState.entries) {
+      return smartWordRows(entries)
+        .filter(row => row.dueIn <= 0)
+        .sort((a, b) => a.dueIn - b.dueIn || a.mastery - b.mastery || b.schedule.lapses - a.schedule.lapses)
+        .map(row => row.item);
+    }
+
     function saveAdvancedStats() {
       localStorage.setItem(profileStorageKey(STATS_KEY), JSON.stringify({
-        version: 2,
+        version: 3,
         sessionHistory: appState.sessionHistory,
         hardWords: appState.hardWords,
         lifetimeStats: appState.lifetimeStats,
@@ -2630,6 +2855,9 @@ Listening - UNIT 2
         appState.groupStats = data.groupStats && typeof data.groupStats === "object" ? data.groupStats : {};
         appState.dailyStats = data.dailyStats && typeof data.dailyStats === "object" ? data.dailyStats : {};
         appState.wordPerformance = data.wordPerformance && typeof data.wordPerformance === "object" ? data.wordPerformance : {};
+        Object.keys(appState.wordPerformance).forEach(key => {
+          appState.wordPerformance[key] = normalizeWordSchedule(appState.wordPerformance[key]);
+        });
 
         if (!Object.keys(appState.modeStats).length && appState.sessionHistory.length) {
           appState.sessionHistory.forEach(session => {
@@ -2766,6 +2994,7 @@ Listening - UNIT 2
 
       renderGroupSelect();
       renderMainWrongSummary();
+      renderSmartLearningDashboard();
     }
 
     function renderGroupSelect() {
@@ -2862,6 +3091,9 @@ Listening - UNIT 2
       let pool = appState.selectedGroup === "__all__"
         ? [...appState.entries]
         : appState.entries.filter(item => item.group === appState.selectedGroup);
+      if (appState.selectedMode === "spaced-review") {
+        return getDueReviewPool(pool);
+      }
       if (appState.selectedMode === "synonym") {
         pool = pool.filter(item => uniqueStrings(item.synonyms).length);
       }
@@ -2878,7 +3110,7 @@ Listening - UNIT 2
     }
 
     function randomMode() {
-      if (appState.selectedMode === "mixed" || appState.selectedMode === "wrong-only" || appState.selectedMode === "marked-only") {
+      if (["mixed", "wrong-only", "marked-only", "spaced-review"].includes(appState.selectedMode)) {
         return Math.random() < 0.5 ? "multiple" : "typing";
       }
       if (appState.selectedMode === "speed") return "multiple";
@@ -2908,6 +3140,9 @@ Listening - UNIT 2
       appState.targetCount = Number(countSelect.value);
 
       appState.quizPool = getPoolBySelection();
+      if (appState.selectedMode === "spaced-review" && appState.quizPool.length) {
+        appState.targetCount = Math.min(appState.targetCount, appState.quizPool.length);
+      }
       appState.quizUsedIndexes = [];
       appState.currentQuestion = null;
       appState.currentMode = "multiple";
@@ -2939,6 +3174,8 @@ Listening - UNIT 2
           alert("Nhóm này chưa có dữ liệu collocation. Hãy lấy gợi ý hoặc thêm thủ công trước.");
         } else if (appState.selectedMode === "marked-only") {
           alert("Nhóm này chưa có từ nào được đánh dấu. Bấm ☆ ở phần Preview để lưu từ cần ôn.");
+        } else if (appState.selectedMode === "spaced-review") {
+          alert("Hôm nay chưa có từ nào đến lịch ôn trong nhóm này. Bạn có thể học chế độ khác hoặc quay lại vào ngày đến hạn.");
         } else {
           alert("Không có dữ liệu phù hợp để bắt đầu học.");
         }
@@ -3412,14 +3649,12 @@ Listening - UNIT 2
       daily[outcome] += 1;
       appState.dailyStats[today] = daily;
 
-      const wordKey = item.word + "||" + item.meaning;
-      const wordStats = {
-        ...normalizeCounter(appState.wordPerformance[wordKey]),
-        word: item.word,
-        meaning: item.meaning,
-        group: item.group,
-        lastSeen: new Date().toISOString()
-      };
+      const wordKey = wordPerformanceKey(item);
+      const wordStats = scheduleAfterOutcome(
+        normalizeWordSchedule(appState.wordPerformance[wordKey], item),
+        outcome
+      );
+      wordStats.lastSeen = new Date().toISOString();
       wordStats.attempted += 1;
       wordStats[outcome] += 1;
       appState.wordPerformance[wordKey] = wordStats;
@@ -3441,14 +3676,12 @@ Listening - UNIT 2
       appState.dailyStats[today] = daily;
 
       if (item) {
-        const wordKey = item.word + "||" + item.meaning;
-        const wordStats = {
-          ...normalizeCounter(appState.wordPerformance[wordKey]),
-          word: item.word,
-          meaning: item.meaning,
-          group: item.group,
-          lastSeen: new Date().toISOString()
-        };
+        const wordKey = wordPerformanceKey(item);
+        const wordStats = scheduleAfterOutcome(
+          normalizeWordSchedule(appState.wordPerformance[wordKey], item),
+          "skipped"
+        );
+        wordStats.lastSeen = new Date().toISOString();
         wordStats.skipped += 1;
         appState.wordPerformance[wordKey] = wordStats;
       }
@@ -3893,6 +4126,7 @@ Listening - UNIT 2
         "word-family": "Word family",
         collocation: "Collocation",
         "marked-only": "Từ đã đánh dấu",
+        "spaced-review": "🧠 Ôn thông minh",
         "memory-match": "🧠 Lật thẻ trí nhớ",
         "word-scramble": "🔤 Xếp chữ",
         "word-catch": "🎯 Bắt từ",
@@ -3939,7 +4173,73 @@ Listening - UNIT 2
       return days;
     }
 
+    function renderSmartLearningDashboard() {
+      const rows = smartWordRows();
+      const dueRows = rows.filter(row => row.dueIn <= 0);
+      const masteredRows = rows.filter(row => row.mastery >= 80 && row.schedule.repetitions >= 3);
+      const forgettingRows = rows.filter(row => row.dueIn <= 7 && row.mastery < 80);
+
+      dueTodayCount.textContent = dueRows.length;
+      masteredCount.textContent = masteredRows.length;
+      forgettingSoonCount.textContent = forgettingRows.length;
+      startSmartReviewBtn.disabled = !dueRows.length;
+      startSmartReviewBtn.textContent = dueRows.length ? `Ôn ${dueRows.length} từ` : "Đã ôn xong hôm nay";
+
+      if (!rows.length) {
+        smartReviewText.textContent = "Hãy nhập danh sách từ để hệ thống tạo lịch ôn cá nhân.";
+      } else if (dueRows.length) {
+        const overdue = dueRows.filter(row => row.dueIn < 0).length;
+        smartReviewText.textContent = `${dueRows.length} từ đến lịch${overdue ? `, gồm ${overdue} từ quá hạn` : ""}. Trả lời đúng sẽ giãn lịch; trả lời sai sẽ được ôn lại sớm hơn.`;
+      } else {
+        const nextDue = Math.min(...rows.map(row => row.dueIn).filter(days => days > 0));
+        smartReviewText.textContent = Number.isFinite(nextDue)
+          ? `Bạn đã hoàn thành lịch hôm nay. Lượt ôn tiếp theo sau ${nextDue} ngày.`
+          : "Bạn đã hoàn thành lịch ôn hiện tại.";
+      }
+
+      const heatDays = lastDays(35);
+      const activities = heatDays.map(day => {
+        const stats = appState.dailyStats[day.key] || {};
+        return (Number(stats.attempted) || 0) + (Number(stats.skipped) || 0);
+      });
+      const maxActivity = Math.max(1, ...activities);
+      studyHeatmap.innerHTML = heatDays.map((day, index) => {
+        const activity = activities[index];
+        const level = activity ? Math.max(1, Math.ceil(activity / maxActivity * 4)) : 0;
+        return `<div class="heat-cell${level ? ` level-${level}` : ""}" title="${escapeAttr(day.key)}: ${activity} lượt học" aria-label="${escapeAttr(day.key)}: ${activity} lượt học"></div>`;
+      }).join("");
+
+      const buckets = [
+        { label: "Mới", count: rows.filter(row => !row.schedule.attempted).length },
+        { label: "Đang học", count: rows.filter(row => row.schedule.attempted && row.mastery < 45).length },
+        { label: "Đang nhớ", count: rows.filter(row => row.mastery >= 45 && row.mastery < 80).length },
+        { label: "Thành thạo", count: masteredRows.length }
+      ];
+      masteryDistribution.innerHTML = rows.length
+        ? buckets.map(bucket => {
+          const percent = Math.round(bucket.count / rows.length * 100);
+          return `<div class="mastery-row"><span>${bucket.label}</span><div class="mastery-track"><div class="mastery-fill" style="width:${percent}%"></div></div><b>${bucket.count}</b></div>`;
+        }).join("")
+        : `<div class="empty">Chưa có dữ liệu.</div>`;
+
+      const priorityRows = [...rows]
+        .sort((a, b) => a.dueIn - b.dueIn || a.mastery - b.mastery || b.schedule.lapses - a.schedule.lapses)
+        .slice(0, 10);
+      smartWordList.innerHTML = priorityRows.length
+        ? priorityRows.map(row => {
+          const timing = row.dueIn < 0
+            ? `Quá hạn ${Math.abs(row.dueIn)} ngày`
+            : row.dueIn === 0
+              ? "Ôn hôm nay"
+              : `Sau ${row.dueIn} ngày`;
+          const retentionText = row.schedule.attempted ? ` • Ghi nhớ dự báo ${row.retention}%` : " • Từ mới";
+          return `<div class="performance-item"><div class="name"><b>${escapeHtml(row.item.word)}</b><br><span class="muted">${escapeHtml(row.item.meaning)}</span></div><div class="value"><b>${timing}</b><br>Thành thạo ${row.mastery}%${retentionText}</div></div>`;
+        }).join("")
+        : `<div class="empty">Chưa có dữ liệu.</div>`;
+    }
+
     function renderAdvancedDashboard() {
+      renderSmartLearningDashboard();
       const lifetime = appState.lifetimeStats;
       const lifetimeAcc = lifetime.attempted ? Math.round((lifetime.correct / lifetime.attempted) * 100) : 0;
       lifetimeAttempted.textContent = lifetime.attempted;
@@ -3971,6 +4271,8 @@ Listening - UNIT 2
         ? Math.round((lifetime.skipped / (lifetime.attempted + lifetime.skipped)) * 100)
         : 0;
       const insights = [];
+      const dueNow = getDueReviewPool().length;
+      if (dueNow) insights.push(`Hôm nay có <b>${dueNow} từ</b> đến lịch ôn thông minh.`);
       if (bestMode) insights.push(`Bạn làm tốt nhất ở <b>${escapeHtml(modeLabel(bestMode.name))}</b> (${bestMode.accuracy}%).`);
       if (weakestGroup) insights.push(`Nên ôn thêm nhóm <b>${escapeHtml(weakestGroup.name)}</b> (${weakestGroup.accuracy}%).`);
       if (skipRate >= 20) insights.push(`Tỷ lệ bỏ qua đang là <b>${skipRate}%</b>; thử giảm số câu hoặc chuyển sang flashcard.`);
@@ -4498,6 +4800,14 @@ mentor (v) – hướng dẫn, cố vấn`;
     });
 
     function updateStartButtonLabel() {
+      if (modeSelect.value === "spaced-review") {
+        const basePool = groupSelect.value === "__all__"
+          ? appState.entries
+          : appState.entries.filter(item => item.group === groupSelect.value);
+        const due = getDueReviewPool(basePool).length;
+        startQuizBtn.textContent = due ? `Ôn ${due} từ đến lịch` : "Chưa có từ đến lịch";
+        return;
+      }
       startQuizBtn.textContent = isGameMode(modeSelect.value)
         ? `Chơi ngay: ${modeLabel(modeSelect.value).replace(/^[^\p{L}\p{N}]+/u, "")}`
         : "Bắt đầu học";
@@ -4511,6 +4821,13 @@ mentor (v) – hướng dẫn, cố vấn`;
       });
     });
     modeSelect.addEventListener("change", updateStartButtonLabel);
+    groupSelect.addEventListener("change", updateStartButtonLabel);
+    startSmartReviewBtn.addEventListener("click", () => {
+      groupSelect.value = "__all__";
+      modeSelect.value = "spaced-review";
+      updateStartButtonLabel();
+      startStudySession(false);
+    });
 
     backToMainBtn.addEventListener("click", () => {
       clearTimer();

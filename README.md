@@ -68,6 +68,20 @@ Dashboard mới lưu và hiển thị:
 
 Dữ liệu thống kê cũ được tự động chuyển sang schema mới. Tối đa 100 phiên gần nhất được giữ trong `localStorage`; hai biểu đồ phiên học chỉ vẽ 20 phiên gần nhất để tránh quá tải giao diện.
 
+## Ôn tập ngắt quãng thông minh
+
+- Chế độ **Ôn thông minh hôm nay** tự chọn các từ mới, đến hạn hoặc quá hạn trong nhóm đang chọn.
+- Mỗi từ có lịch riêng gồm số lần nhớ liên tiếp, khoảng cách ôn, hệ số dễ, số lần quên và ngày đến hạn.
+- Trả lời đúng làm khoảng cách tăng dần từ 1 ngày, 3 ngày rồi nhân theo độ dễ của từ. Trả lời sai đặt từ về lịch ôn lại trong ngày và giảm hệ số dễ; bỏ qua cũng giữ từ trong hàng đợi hôm nay.
+- Lịch được cập nhật từ mọi chế độ học và trò chơi, không chỉ từ chế độ ôn thông minh. Dữ liệu lịch nằm trong thống kê riêng của từng tài khoản.
+
+## Thống kê học thông minh
+
+- Dashboard hiển thị số từ cần ôn hôm nay, số từ đã thành thạo và số từ có nguy cơ quên trong 7 ngày.
+- Mức độ thành thạo kết hợp accuracy, chuỗi trả lời đúng, khoảng cách ôn, số lần quên và độ ghi nhớ dự báo theo thời gian.
+- Heatmap 35 ngày cho biết nhịp học; bảng phân bố chia từ thành Mới, Đang học, Đang nhớ và Thành thạo.
+- Danh sách **Từ cần ưu tiên** xếp từ quá hạn/yếu lên trước, đồng thời hiển thị lịch tiếp theo, mức thành thạo và tỷ lệ ghi nhớ dự báo.
+
 ## Các lỗi đã sửa
 
 - `reading` và `listening` có nghĩa không còn bị nhận nhầm thành tiêu đề nhóm.
